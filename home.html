@@ -306,6 +306,14 @@ class SnqrHeader extends HTMLElement{
     const doctrine=[ "Quantitative Market Forensics","AI-Powered Geopolitical Risk","SNQR AI Terminal","Quantum-Driven Alpha Signals","Macro Systems Modeling","India-First, Globally Aligned","Sovereign-Grade Intelligence","Policy Transmission Analytics","Liquidity & Microstructure","Options Greeks Architecture","Delta-Hedged PnL Models","Factor Regime Detection","Risk Budgeting Frameworks","Stress & Tail Scenarios","Explainable AI Models","Data-to-Doctrine Pipelines","Research-Grade Backtesting","Real-Time Signal Extraction","Cross-Asset Correlation Maps","Event-Driven Macro Forensics","Supply-Chain Intelligence","Sanctions & Trade Flows","Election & Policy Watch","Energy & Commodities Matrix","Climate & Transition Risk","Financial Stability Radar","Bank & Credit Analytics","Capital Flows Observatory","FX & Rates Strategy","Equity & Derivatives Lab","Sovereign Risk Dashboards","Bharat Economic Arc™","Capital Currents™","SNQR Model Lab™","SNQR Investor Dispatch™","Standard SNQR Research","SNQR Signature","SNQR Quant & Quantum Lab","Governance & Compliance Intel","Enterprise Risk Architecture","Board-Ready Briefings","Institutional-Grade Methodology","Verified Data Lineage","Transparent Model Cards","Research You Can Audit","Actionable, Accountable Signals","We Quantify the Future","Markets. Policy. Geostrategy." ];
     const state={ pubs:[], cats:[] };
 
+    function decodeJwt(token) {
+      try {
+        return JSON.parse(atob(token.split('.')[1]));
+      } catch (e) {
+        return null;
+      }
+    }
+
     Promise.allSettled([fetch(pubsEP),fetch(catsEP)]).then(async([p,c])=>{
       try{ if(p.status==='fulfilled' && p.value.ok){ const j=await p.value.json(); state.pubs=j.publications||[]; } }catch{}
       try{ if(c.status==='fulfilled' && c.value.ok){ const j=await c.value.json(); state.cats=j.categories||[]; } }catch{}
@@ -313,7 +321,29 @@ class SnqrHeader extends HTMLElement{
       drawTopTicker(); drawBottomTicker(); drawPanels();
       setupDesktopSearch(); setupMobileSearch(); setupConnect(); setupMore(); markActive(active);
       this._installSpacer();
+      setupUserSession();
     });
+
+    function setupUserSession() {
+      const token = localStorage.getItem('user-token');
+      if (token) {
+        const user = decodeJwt(token);
+        if (user) {
+          const loginButton = s.querySelector('#login');
+          if (loginButton) {
+            loginButton.textContent = user.name;
+            loginButton.href = '#'; // Or a profile page
+            loginButton.addEventListener('click', (e) => {
+              e.preventDefault();
+              if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('user-token');
+                location.reload();
+              }
+            });
+          }
+        }
+      }
+    }
 
     /* spacer */
     this._installSpacer=()=>{

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/madalamanikanta/SNQR#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "better-sqlite3": "^9.6.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
