@@ -3,6 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const app = express();
 const port = 3000;
 
@@ -17,6 +18,7 @@ app.use(express.static(__dirname));
 const publicationsPath = path.join(__dirname, 'research', 'data', 'publications.json');
 const categoriesPath = path.join(__dirname, 'research', 'data', 'categories.json');
 const contactMessagesPath = path.join(__dirname, 'contact_messages.json');
+const usersPath = path.join(__dirname, 'users.json');
 
 // Middleware to protect admin routes
 const authenticateAdmin = (req, res, next) => {
@@ -41,6 +43,34 @@ app.post('/api/admin/login', (req, res) => {
   } else {
     res.status(401).send('Invalid password');
   }
+});
+
+// POST /api/login
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  fs.readFile(usersPath, 'utf8', async (err, data) => {
+    if (err) {
+      return res.status(500).send('Error reading users file');
+    }
+    const users = JSON.parse(data);
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+      return res.status(400).send('Invalid email or password');
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(400).send('Invalid email or password');
+    }
+
+    if (!user.approved) {
+      return res.status(401).send('Your account has not been approved by an admin yet.');
+    }
+
+    const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  });
 });
 
 // GET /api/publications
@@ -164,6 +194,67 @@ app.post('/api/admin/categories', authenticateAdmin, (req, res) => {
       return;
     }
     res.status(200).send('categories.json saved');
+  });
+});
+
+// POST /api/signup
+app.post('/api/signup', async (req, res) => {
+  const { name, email, password } = req.body;
+  fs.readFile(usersPath, 'utf8', async (err, data) => {
+    let users = [];
+    if (!err) {
+      users = JSON.parse(data);
+    }
+
+    const existingUser = users.find(u => u.email === email);
+    if (existingUser) {
+      return res.status(400).send('User with this email already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = {
+      id: Date.now().toString(),
+      name,
+      email,
+      password: hashedPassword,
+      approved: false
+    };
+
+    users.push(newUser);
+    fs.writeFile(usersPath, JSON.stringify(users, null, 2), (err) => {
+      if (err) {
+        res.status(500).send('Error saving user');
+        return;
+      }
+      const approvalLink = `http://localhost:${port}/api/admin/approve-user?userId=${newUser.id}`;
+      console.log(`\n--- NEW USER SIGNUP ---\nApproval link for ${newUser.name} (${newUser.email}):\n${approvalLink}\n`);
+      res.status(201).send('Signup successful. Please wait for admin approval.');
+    });
+  });
+});
+
+// GET /api/admin/approve-user
+app.get('/api/admin/approve-user', (req, res) => {
+  const { userId } = req.query;
+  fs.readFile(usersPath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Error reading users file');
+    }
+    let users = JSON.parse(data);
+    const userIndex = users.findIndex(u => u.id === userId);
+
+    if (userIndex === -1) {
+      return res.status(404).send('User not found');
+    }
+
+    users[userIndex].approved = true;
+
+    fs.writeFile(usersPath, JSON.stringify(users, null, 2), (err) => {
+      if (err) {
+        return res.status(500).send('Error saving user');
+      }
+      res.send(`<h1>User ${users[userIndex].name} approved successfully!</h1>`);
+    });
   });
 });
 
