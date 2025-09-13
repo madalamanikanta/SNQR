@@ -41,8 +41,8 @@ class SnqrHeader extends HTMLElement{
   connectedCallback(){
     const active =(this.getAttribute('active')||'home').toLowerCase();
     const logo   =(this.getAttribute('logo')  || '/templet/pics/logo.png');
-    const pubsEP =(this.getAttribute('pubs')  || '/research/data/publications.json');
-    const catsEP =(this.getAttribute('cats')  || '/research/data/categories.json');
+    const pubsEP =(this.getAttribute('pubs')  || '/api/publications');
+    const catsEP =(this.getAttribute('cats')  || '/api/categories');
     const homeEP =(this.getAttribute('home')  || '/home.html');
     const joinEP =(this.getAttribute('join')  || '/join-collection.html');
     const serveEP=(this.getAttribute('serve') || '/What-We-Serve.html');
@@ -449,25 +449,22 @@ class SnqrHeader extends HTMLElement{
     })();
 
     /* search */
-    function filterRows(q){
+    async function filterRows(q){
       const n=(q||'').toLowerCase();
-      return (state.pubs||[]).filter(p =>
-        (p.title||'').toLowerCase().includes(n) ||
-        (p.deck ||'').toLowerCase().includes(n) ||
-        (p.id   ||'').toLowerCase().includes(n) ||
-        (p.division||'').toLowerCase().includes(n) ||
-        (String(p.cat||p.catSlug||'')).toLowerCase().includes(n)
-      );
+      if (!n) return [];
+      const response = await fetch(`/api/search?q=${encodeURIComponent(n)}`);
+      if (!response.ok) return [];
+      return await response.json();
     }
     function setupDesktopSearch(){
       const form=$('#searchForm'), input=$('#q'), ta=$('#ta'); if(!form) return;
       let t=null;
-      const render=q=>{
+      const render=async q=>{
         const needle=(q||'').trim();
         ta.innerHTML=''; ta.classList.remove('open'); if(!needle) return;
-        const rows=filterRows(needle).slice(0,10);
+        const rows=await filterRows(needle);
         const ul=document.createElement('ul');
-        ul.innerHTML=rows.map((p,i)=>(
+        ul.innerHTML=rows.slice(0,10).map((p,i)=>(
           '<li class="'+(i===0?'is-active':'')+'" data-url="'+(p.url||'#')+'">'+
             '<div class="title">'+hi(p.title,needle)+'</div>'+
             '<div class="meta">'+esc(p.division||'')+' • '+esc(p.cat||p.catSlug||'')+' • '+fmt(p.publishDate)+'</div>'+
@@ -478,7 +475,7 @@ class SnqrHeader extends HTMLElement{
         ul.querySelectorAll('li[data-url]').forEach(li=> li.addEventListener('click',()=> location.href=li.getAttribute('data-url')));
         const more=ul.querySelector('li[data-more]'); if(more) more.addEventListener('click',()=> location.href='/research/category.html?cat=all&q='+encodeURIComponent(needle));
       };
-      input.addEventListener('input',e=>{ clearTimeout(t); t=setTimeout(()=>render(e.target.value),120); });
+      input.addEventListener('input',e=>{ clearTimeout(t); t=setTimeout(()=>render(e.target.value),250); });
       input.addEventListener('focus',()=> input.dispatchEvent(new Event('input')));
       addEventListener('click',e=>{ if(!s.contains(e.target)) ta.classList.remove('open'); });
       form.addEventListener('submit',e=>{
@@ -497,10 +494,10 @@ class SnqrHeader extends HTMLElement{
       if(!openBtn) return;
       const open=()=>{ ov.classList.add('open'); inp.value=''; list.innerHTML=''; setTimeout(()=>inp.focus(),40); };
       const close=()=> ov.classList.remove('open');
-      const render=q=>{
+      const render=async q=>{
         const needle=(q||'').trim(); list.innerHTML=''; if(!needle) return;
-        const rows=filterRows(needle).slice(0,16);
-        list.innerHTML=rows.map(p=>(
+        const rows=await filterRows(needle);
+        list.innerHTML=rows.slice(0,16).map(p=>(
           '<li><a href="'+(p.url||'#')+'"><div class="title">'+hi(p.title,needle)+'</div>'+
           '<div class="meta">'+esc(p.division||'')+' • '+esc(p.cat||p.catSlug||'')+' • '+fmt(p.publishDate)+'</div></a></li>'
         )).join('') + '<li><a href="/research/category.html?cat=all&q='+encodeURIComponent(needle)+'">View all results for “'+esc(needle)+'”</a></li>';
@@ -533,9 +530,18 @@ class SnqrHeader extends HTMLElement{
           reason:$('#wReason').value, notes:($('#wNotes').value||'').trim(),
           ts:new Date().toISOString()
         };
-        if(typeof window.snqrConnectSubmit==='function'){ window.snqrConnectSubmit(payload); close(); return; }
-        location.href='mailto:connect@snqrglobal.com?subject=SNQR Connect&body='+encodeURIComponent(JSON.stringify(payload,null,2));
-        setTimeout(close,300);
+        fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(res => {
+          if (res.ok) {
+            alert('Message sent!');
+            close();
+          } else {
+            alert('Error sending message.');
+          }
+        }).catch(() => alert('Error sending message.'));
       });
     }
 
