@@ -1,0 +1,48 @@
+/* theme.css */
+
+/* Global reset for consistency */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Background theme */
+body {
+  background: radial-gradient(circle at center, #1f0036, #000); /* dark blue gradient */
+  color: #f1f5f9;  /* light text */
+  min-height: 100vh;
+}
+
+/* Common container */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Header/Footer theme */
+header, footer {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Buttons */
+button, .btn {
+  background: #3b82f6; /* blue */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #2563eb; /* darker blue */
+}

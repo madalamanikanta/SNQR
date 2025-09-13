@@ -1,0 +1,197 @@
+:root{
+  /* Layout */
+  --header-height: 88px;
+  --gap-xxl: 96px;
+
+  /* Palette (SNQR dark theme) */
+  --bg-start:#0b0b15;        /* deep aubergine/navy */
+  --bg-end:#17172e;          /* nocturne violet */
+  --text:#e9ecf1;
+  --muted:#cbd2dc;
+
+  /* Accents: pink → violet (per About page look) */
+  --accent1:#ff4db8;
+  --accent2:#8a7dff;
+  --focus:#00d4ff;
+
+  /* Surfaces & strokes */
+  --glass: rgba(255,255,255,.07);
+  --card: rgba(255,255,255,.06);
+  --stroke: rgba(255,255,255,.14);
+  --divider: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+
+  /* Rounds & shadows */
+  --r-xl: 22px; --r-lg: 14px; --r-md: 12px;
+  --shadow-s: 0 10px 30px rgba(0,0,0,.25);
+  --shadow-l: 0 22px 70px rgba(0,0,0,.5);
+
+  /* Max widths */
+  --maxw-hero: 820px;
+  --maxw-form: 600px;
+
+  /* Motion */
+  --t: 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* Page background — matches About/Landing */
+html,body{height:100%}
+body{
+  margin:0; color:var(--text);
+  background:
+    radial-gradient(1200px 650px at 82% -10%, rgba(138,125,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 12% 8%, rgba(255,77,184,.14), transparent 60%),
+    linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+/* Contain everything below your global header; prevents overlap */
+.page{ padding: var(--header-height) 24px calc(80px + env(safe-area-inset-bottom)); }
+
+/* Clear section boundaries (no more “stuck between” look) */
+.section-divider{
+  height: 2px; margin: var(--gap-xxl) auto;
+  background: var(--divider);
+  max-width: 1080px; border-radius: 999px;
+}
+
+/* Section pattern */
+.section-block{
+  position: relative; isolation: isolate;
+  padding: 64px 0; /* internal breathing room */
+}
+.center{ text-align:center }
+.narrow{ max-width: 1000px; margin: 0 auto }
+
+.section-header{ max-width: var(--maxw-hero); margin: 0 auto 22px }
+.eyebrow{
+  color: rgba(255,255,255,.7); letter-spacing:.22em; font-size:12px; text-transform:uppercase; margin-bottom:8px;
+}
+.display{
+  font-family:"Times New Roman", Times, serif;
+  font-size: clamp(34px, 4.6vw, 56px); line-height:1.1; margin:0 0 10px;
+}
+.u-line{
+  width: 140px; height: 3px; margin: 12px auto 16px; border-radius:999px;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+}
+.lede{
+  font-family:"Times New Roman", Times, serif;
+  font-size: clamp(18px, 2.2vw, 24px); line-height:1.55; color:var(--muted);
+  max-width: 60ch; margin: 0 auto;
+}
+.muted{ color:var(--muted) }
+.hint{ font-size:12px; color:var(--muted) }
+
+/* Avoid margin-collapsing issues that caused “middle of two sections” look */
+.section-block::before{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:-1;
+  /* subtle vertical separator glow per section (optional) */
+}
+
+/* Surface cards (FAQ & Dispatch), to visually anchor sections */
+.section-surface{
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  box-shadow: var(--shadow-s);
+  max-width: 980px;
+  margin: 22px auto 0;
+}
+
+/* Buttons */
+.section-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top: 24px }
+.btn{
+  appearance:none; border:1px solid var(--stroke); background: var(--glass);
+  color:var(--text); padding: 14px 20px; border-radius:999px; cursor:pointer; font-weight:600;
+  box-shadow: var(--shadow-s); transition: transform var(--t), border-color var(--t), background var(--t);
+  backdrop-filter: saturate(1.1) blur(6px);
+}
+.btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.26) }
+.btn:disabled{ opacity:.6; cursor:not-allowed; transform:none }
+.btn-primary{
+  background: linear-gradient(135deg, rgba(255,77,184,.42), rgba(138,125,255,.36));
+  border-color: transparent;
+}
+.btn-outline{ background: transparent; border-color: rgba(255,255,255,.22) }
+
+/* FAQ */
+.faq-wrap{ max-width: 880px; margin: 0 auto }
+.faq{ display:flex; flex-direction:column; gap:14px }
+.faq-item{ background:var(--card); border:1px solid var(--stroke); border-radius:var(--r-lg); box-shadow:var(--shadow-s); overflow:hidden }
+.faq-head{ position:relative; padding:16px 18px 38px; cursor:pointer }
+.faq-q{ margin:0; font-size:18px }
+.faq-learn{ position:absolute; bottom:10px; left:18px; font-size:13px; color:var(--muted); display:flex; gap:6px }
+.faq-body{ display:none; padding: 0 18px 18px; color:var(--muted) }
+.faq-item.open .faq-body{ display:block } .faq-item.open .faq-learn{ color:#9de1ff }
+
+/* Dispatch card tweaks */
+.dispatch-card p{ margin-top:8px }
+
+/* Overlays (Wizards) */
+.overlay{
+  position: fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:24px;
+  background:
+    radial-gradient(900px 480px at 20% 10%, rgba(255,77,184,.20), transparent 60%),
+    radial-gradient(900px 480px at 80% 10%, rgba(138,125,255,.22), transparent 60%),
+    linear-gradient(180deg, rgba(10,8,20,.86), rgba(10,8,20,.88));
+  backdrop-filter: blur(2px);
+}
+.overlay.show{ display:flex; animation: fadeIn .18s ease-out both }
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+
+.modal{
+  width:100%; max-width:860px;
+  background: linear-gradient(180deg, rgba(36,38,64,.96), rgba(20,21,38,.96));
+  border:1px solid var(--stroke); border-radius: var(--r-xl); box-shadow: var(--shadow-l); overflow:hidden
+}
+.modal-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:16px 18px; border-bottom:1px solid var(--stroke) }
+.modal-title{ font-family:"Times New Roman", Times, serif; font-size:22px; margin:0 }
+.modal-close{ appearance:none; border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:22px }
+.modal-body{ padding:18px; display:flex; gap:18px; flex-wrap:wrap }
+
+.stepper{ width:220px; min-width:220px; border-right:1px solid var(--stroke); padding-right:14px }
+.steps{ list-style:none; margin:0; padding:0; display:grid; gap:10px; color:var(--muted); font-size:14px }
+.steps li{ display:grid; grid-template-columns:22px 1fr; gap:10px; align-items:center }
+.dot{ width:18px; height:18px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--stroke); background:rgba(255,255,255,.05); font-size:12px }
+.steps li.active .dot{ background:var(--accent2); color:#111; border-color:transparent; font-weight:700 }
+.steps li.done .dot{ background:#38d996; color:#111; border-color:transparent }
+.steps li.active, .steps li.done{ color:var(--text) }
+
+.form{ flex:1; min-width:280px; max-width:var(--maxw-form) }
+.field{ margin-bottom:14px }
+.label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px }
+.input,.select,.textarea{
+  width:100%; padding:12px; border-radius:10px; border:1px solid var(--stroke);
+  background:rgba(255,255,255,.05); color:var(--text); outline:none;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.input:focus,.select:focus,.textarea:focus{ border-color: rgba(255,255,255,.28); box-shadow:0 0 0 3px rgba(0,212,255,.14) }
+.textarea{ min-height:110px; resize:vertical }
+.row{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+@media (max-width:640px){ .row{ grid-template-columns:1fr } .stepper{ display:none } }
+
+.choices{ display:flex; flex-wrap:wrap; gap:10px }
+.chip{ position:relative; display:inline-flex; align-items:center; padding:10px 12px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.05); cursor:pointer; user-select:none }
+.chip input{ position:absolute; inset:0; opacity:0 }
+.chip.active{ background: linear-gradient(135deg, rgba(255,77,184,.35), rgba(138,125,255,.25)); border-color:transparent }
+
+.form-actions{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:8px }
+.btn-next,.btn-prev,.btn-submit{
+  padding:12px 16px; border-radius:10px; border:1px solid var(--stroke); background:var(--glass); color:var(--text); cursor:pointer;
+  transition: transform var(--t), border-color var(--t)
+}
+.btn-next:hover,.btn-prev:hover,.btn-submit:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.25) }
+.btn-submit.btn-primary{ background: linear-gradient(135deg, rgba(255,77,184,.42), rgba(138,125,255,.36)); border-color:transparent }
+.consent-chip{ border-radius:10px; padding:10px 12px }
+
+.success{ text-align:center; padding:28px 18px }
+.ticket{ font-size:20px; font-weight:700; margin-top:8px }
+
+/* Reveal on scroll */
+.reveal{ opacity:0; transform: translateY(14px); transition: opacity 500ms var(--t), transform 600ms var(--t) }
+.reveal.in{ opacity:1; transform:none }
+
+/* Small helper */
+.lede.small-left{ text-align:left; font-size:18px }

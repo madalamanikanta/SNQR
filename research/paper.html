@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SNQR Research — Publication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="./research.css" />
+  <link rel="stylesheet" href="./paper.css" />
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- PDF.js + PageFlip -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip@2/dist/css/page-flip.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";</script>
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2/dist/js/page-flip.browser.min.js"></script>
+
+  <!-- Optional PPTX renderer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs/dist/pptxjs.min.js"></script>
+  <link  href="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs/dist/pptxjs.min.css" rel="stylesheet"/>
+
+  <link rel="icon" href="./assets/favicon.svg" />
+</head>
+<body data-page="paper">
+  <!-- Editors’ Picks — horizontal ticker -->
+  <div class="editors-bar">
+    <div id="editorsMarquee" class="editors-marquee">
+      <ul id="editorsList" class="editors-list"></ul>
+    </div>
+  </div>
+
+  <!-- Topbar -->
+  <header class="snqr-topbar">
+    <div class="topbar__left">
+      <!-- Main site home (relative to /research/) -->
+      <a class="icon-link" href="/home.html" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4H9v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+      </a>
+
+      <!-- Library home (visible icon) -->
+      <a class="libhome" href="./index.html" aria-label="SNQR Library">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 4h6v16H4zM10 4l10 2v16l-10-2z" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+      </a>
+
+      <a class="brand" href="./index.html" aria-label="SNQR Library">
+        <img class="brand__logo" src="/templet/pics/logo.png" alt="SNQR" />
+      </a>
+
+      <nav class="nav">
+        <a class="nav__link" href="./articles.html">Articles</a>
+
+        <a class="nav__link is-active" data-catlink="flagship">Standard SNQR Research</a>
+        <a class="nav__link" data-catlink="signature">SNQR Signature</a>
+        <a class="nav__link" data-catlink="lab">SNQR Quant &amp; Quantum Lab</a>
+
+        <!-- Mega panels are filled by JS -->
+        <div id="mega-flagship" class="mega"></div>
+        <div id="mega-signature" class="mega"></div>
+        <div id="mega-lab" class="mega"></div>
+      </nav>
+    </div>
+
+    <div class="topbar__right">
+      <div class="search">
+        <label class="sr-only" for="q">Search research</label>
+        <input id="q" type="search" placeholder="Search SNQR research…" />
+        <button id="btnSearch" class="btn btn--ghost">Search</button>
+
+</button>
+
+      </div>
+
+      <div class="sort-inline">
+        <label for="sortTop" class="sr-only">Sort</label>
+        <select id="sortTop">
+          <option value="newest" selected>Newest</option>
+          <option value="mostread">Most Read</option>
+          <option value="editors">Editor’s Picks</option>
+        </select>
+      </div>
+
+      <button class="btn btn--ghost" id="btnToggleSaved" aria-haspopup="true" aria-expanded="false">Saved Views</button>
+      <div id="savedViewsMenu" class="menu" role="menu" aria-label="Saved views"></div>
+      <!-- Profile -->
+      <div class="profile">
+        <button id="btnProfile" class="profile__btn" aria-haspopup="true" aria-expanded="false">
+          <img id="profileAvatar" class="profile__avatar" src="" alt="User" />
+          <span id="profileName" class="profile__name">Guest</span>
+        </button>
+        <div id="profileMenu" class="profile__menu" role="menu" aria-label="Profile menu"></div>
+      </div>
+<!-- Submit Research (bulb icon) -->
+<button id="btnIdea"
+        class="btn btn--ghost btn-icon"
+        data-bs-toggle="modal"
+        data-bs-target="#ideaModal"
+        aria-label="Submit Research Idea"
+        title="Submit your idea will help you research">
+  <i class="fa-solid fa-lightbulb"></i>
+</button>
+    </div>
+  </header>
+  <!-- ===== main grid ===== -->
+  <main id="paperMain" class="paper-grid">
+    <!-- LEFT -->
+    <aside class="left-rail legacy-left">
+      <section class="paper-hero glass" id="heroBox" aria-labelledby="paperTitle">
+        <div class="paper-hero__media" id="paperImage" role="img" aria-label="cover image"></div>
+        <div class="paper-hero__body">
+          <div id="paperKicker" class="paper-kicker">SNQR Research</div>
+          <h1 id="paperTitle" class="paper-title">—</h1>
+          <p id="paperDeck" class="paper-deck">—</p>
+          <div id="paperMeta" class="paper-meta">—</div>
+          <div id="paperDetails" class="paper-details"></div>
+          <div class="paper-actions">
+            <button id="btnShare" class="btn btn--ghost"><i class="fa-solid fa-link"></i> Share</button>
+            <button id="btnHeart" class="heart" aria-pressed="false" title="Save">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.716-4.368-9.428-7.08C-1.14 12.37.322 8.2 3.6 7.6 5.7 7.2 7.3 8.3 8 9.3c.7-1 2.3-2.1 4.4-1.7 3.278.6 4.74 4.77.972 6.32C18.716 16.632 12 21 12 21z"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Desktop-only Latest -->
+      <section class="rail glass latest-desktop">
+        <h3 class="rail__title">Latest Research</h3>
+        <div class="ticker glass"><ul id="latestTickerDesktop" class="latest"></ul></div>
+        <p class="rail__note">Auto-scroll • Hover/touch to pause</p>
+      </section>
+    </aside>
+
+    <!-- RIGHT -->
+    <section class="right-canvas glass">
+      <section class="kt kt--full">
+        <h2 class="kt__title"><span>Key</span> takeaways</h2>
+        <ul id="ktList" class="kt__list"></ul>
+      </section>
+
+      <div class="cta-stack">
+        <button id="readerCTA" class="cta-card cta-reader">
+          <i class="fa-solid fa-book-open"></i><div class="cta-card__text"><strong>Reader</strong></div>
+        </button>
+        <button id="audioCTA" class="cta-card cta-audio" style="display:none">
+          <i class="fa-solid fa-headphones"></i><div class="cta-card__text"><strong>Audio</strong></div>
+        </button>
+      </div>
+
+      <section class="summary">
+        <h3 class="sr-only">Summary</h3>
+        <div id="slidesStack" class="slides-stack" aria-live="polite"></div>
+        <button id="summaryCTA" class="cta-card cta-summary">
+          <i class="fa-solid fa-clapperboard"></i><div class="cta-card__text"><strong>Summary</strong></div>
+        </button>
+      </section>
+    </section>
+  </main>
+
+  <!-- ===== ARTICLES (only if hasArticles) ===== -->
+<section id="paperArticles" class="paper-articles glass container-fluid py-3" style="display:none">
+  <div class="row gx-3 gy-3 align-items-stretch">
+    <!-- Left: Parent research card (narrower) -->
+    <div class="col-12 col-lg-5 col-xl-5">
+      <article id="articlesParentCard" class="card h-100 paper-articles__parent"></article>
+    </div>
+
+    <!-- Right: Article titles list (wider) -->
+    <div class="col-12 col-lg-7 col-xl-7">
+      <div class="glass h-100 d-flex flex-column p-3 paper-articles__listbox">
+        <h3 class="rail__title mb-2">Articles</h3>
+        <div id="articlesList" class="flex-grow-1 paper-articles__list"></div>
+
+        <div class="d-flex gap-2 mt-3 align-items-center">
+          <button id="articlesPrev" type="button" class="btn btn-outline-light btn-sm" aria-label="Previous" style="display:none">‹</button>
+          <button id="articlesNext" type="button" class="btn btn-outline-light btn-sm" aria-label="Next" style="display:none">›</button>
+          <a href="./articles.html" class="btn btn-primary ms-auto">Show more</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Mobile-only Latest (after Reader/Summary/Audio) -->
+  <section class="rail glass latest-mobile">
+    <h3 class="rail__title">Latest Research</h3>
+    <div class="ticker glass"><ul id="latestTickerMobile" class="latest"></ul></div>
+    <p class="rail__note">Auto-scroll • Hover/touch to pause</p>
+  </section>
+
+
+  <!-- Division LTR -->
+  <section id="divisionRow" class="division-row glass">
+    <div class="division-row__head">
+      <h3>More from this division</h3>
+      <a id="divisionAll" class="btn btn--ghost" href="#">View all</a>
+    </div>
+    <div id="divisionScroller" class="division-scroller"></div>
+  </section>
+
+  <!-- FULLSCREEN READER -->
+  <div id="readerCanvas" class="reader-canvas" aria-hidden="true">
+    <div class="reader-scrim"></div>
+    <div class="reader-panel" role="dialog" aria-modal="true">
+      <div class="reader-bar">
+        <button id="canvasPrev" class="icon-btn" title="Prev">‹</button>
+        <button id="canvasNext" class="icon-btn" title="Next">›</button>
+        <div class="reader-spacer"></div>
+        <button id="canvasShare" class="icon-btn" title="Copy link"><i class="fa-solid fa-link"></i></button>
+        <button id="canvasClose" class="icon-btn" title="Close">✕</button>
+      </div>
+      <div class="flip-wrap">
+        <div id="flipContainer" class="flip-container">
+          <div id="flipLoading" class="flip-loading">Loading…</div>
+        </div>
+      </div>
+      <audio id="flipSnd" preload="auto" src="/assets/ui/page-turn-strong.mp3"></audio>
+    </div>
+  </div>
+
+  <!-- SUMMARY FULLSCREEN (mobile slideshow) -->
+  <div id="summaryCanvas" class="reader-canvas" aria-hidden="true">
+    <div class="reader-scrim"></div>
+    <div class="reader-panel" role="dialog" aria-modal="true">
+      <div class="reader-bar">
+        <div class="reader-title"><span id="ssPage">1</span>/<span id="ssTotal">1</span></div>
+        <div class="reader-spacer"></div>
+        <button id="ssPrev" class="icon-btn" title="Prev">‹</button>
+        <button id="ssNext" class="icon-btn" title="Next">›</button>
+        <button id="summaryClose" class="icon-btn" title="Close">✕</button>
+      </div>
+      <div class="summary-fs">
+        <div id="slidesStackFS" class="slides-stack slides-stack--fs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIO DOCK (bottom-right mini player) -->
+  <div id="audioDock" class="audio-dock" hidden>
+    <img id="audioCover" alt="" class="audio-dock__cover"/>
+    <div class="audio-dock__meta">
+      <div id="audioDockTitle" class="audio-dock__title">Audio</div>
+      <div class="audio-dock__bar">
+        <span id="audioCur">0:00</span>
+        <input id="audioSeek" type="range" min="0" max="100" value="0" />
+        <span id="audioTot">0:00</span>
+      </div>
+      <div class="audio-dock__controls">
+        <button id="audioPlay" class="icon-btn"><i class="fa-solid fa-play"></i></button>
+        <button id="audioClose" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+    <audio id="audioPlayer" preload="metadata"></audio>
+  </div>
+
+
+<!-- ===== Suggest Research (3-Step Wizard) ===== -->
+<div class="modal fade" id="ideaModal" tabindex="-1" aria-labelledby="ideaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content"><!-- solid bg handled in CSS -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="ideaModalLabel">Submit Your Research Idea</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Non-clickable step indicator (progress only) -->
+        <ol class="wiz-steps">
+          <li id="wizDot1" class="active">Details</li>
+          <li id="wizDot2">Your Idea</li>
+          <li id="wizDot3">Acceptance</li>
+        </ol>
+
+        <!-- Step 1: Details -->
+        <section id="wizStep1" class="wiz-step">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="wizName" class="form-label">Name</label>
+              <input id="wizName" type="text" class="form-control" placeholder="Your name" required>
+            </div>
+            <div class="col-md-6">
+              <label for="wizEmail" class="form-label">Email</label>
+              <input id="wizEmail" type="email" class="form-control" placeholder="you@company.com" required>
+            </div>
+            <div class="col-12">
+              <label for="wizOrg" class="form-label">Organisation (optional)</label>
+              <input id="wizOrg" type="text" class="form-control" placeholder="Company / Institution">
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 2: Idea -->
+        <section id="wizStep2" class="wiz-step d-none">
+          <div class="mb-3">
+            <label for="wizTitle" class="form-label">Proposed Title</label>
+            <input id="wizTitle" type="text" class="form-control" placeholder="Working title of your idea" required>
+          </div>
+          <div class="mb-2">
+            <label for="wizDesc" class="form-label">Describe your idea</label>
+            <textarea id="wizDesc" class="form-control" rows="6" placeholder="Min 100 characters…" required></textarea>
+          </div>
+          <p class="small opacity-75 mb-0"><span id="wizDescCount">0</span>/100</p>
+        </section>
+
+        <!-- Step 3: Acceptance -->
+        <section id="wizStep3" class="wiz-step d-none">
+          <p class="mb-2">Please confirm the following to proceed:</p>
+          <div class="form-check">
+            <input id="wizAccept" class="form-check-input" type="checkbox">
+            <label class="form-check-label" for="wizAccept">
+              I confirm this idea is my original submission and agree to the terms & privacy policy.
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <div class="modal-footer d-flex justify-content-between">
+        <button id="wizBack"  type="button" class="btn btn-outline-light">Back</button>
+        <div class="d-flex gap-2">
+          <button id="wizNext1" type="button" class="btn btn-primary">Next</button>
+          <button id="wizNext2" type="button" class="btn btn-primary d-none">Next</button>
+          <button id="wizSubmit" type="button" class="btn btn-success d-none">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <footer id="snqr-footer"
+        class="relative w-full bg-gray-900 text-gray-200 select-none border-t border-white/10"
+        style="font-family:'Times New Roman', Times, serif;">
+
+  
+
+  <!-- === MICRO-BAR : Logo • Quick Links • Socials -------------------------- -->
+  <section class="border-t border-white/10 py-5 px-6 md:px-12
+                  flex flex-col md:flex-row md:justify-between md:items-center text-xs md:text-sm">
+
+    <!-- Left : Logo + Quick Links -->
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+      <div class="flex items-center gap-2">
+        <img src="/templet/pics/logo.png" alt="SNQR Logo" class="h-6 w-auto">
+        <span class="font-semibold">Saptanga Nupura Quant Research</span>
+      </div>
+
+      <nav class="sm:ml-6 flex flex-wrap gap-x-3 gap-y-1 opacity-80">
+        <a href="/legal"       class="hover:text-purple-400">Legal</a><span>|</span>
+        <a href="/privacy"     class="hover:text-purple-400">Privacy Notice</a><span>|</span>
+        <a href="/access-info" class="hover:text-purple-400">Access to Information</a><span>|</span>
+        <a href="/jobs"        class="hover:text-purple-400">Jobs</a><span>|</span>
+        <a href="/contact"     class="hover:text-purple-400">Contact</a>
+      </nav>
+    </div>
+
+    <!-- Right : Social Icons -->
+    <div class="mt-4 md:mt-0 flex items-center gap-4 text-lg">
+      <a href=""   aria-label="Facebook"   class="hover:opacity-75">
+        <i class="fa-brands fa-facebook-f text-[#1877f2]"></i></a>
+      <a href=""aria-label="X / Twitter" class="hover:opacity-75">
+        <i class="fa-brands fa-x-twitter text-gray-200"></i></a>
+      <a href=""          aria-label="GitHub"     class="hover:opacity-75">
+        <i class="fa-brands fa-github"></i></a>
+      <a href="https://www.linkedin.com/company/snquantresearch"
+                                               aria-label="LinkedIn"   class="hover:opacity-75">
+        <i class="fa-brands fa-linkedin-in text-[#0a66c2]"></i></a>
+      <a href="https://wa.me/916304474862"       aria-label="WhatsApp"   class="hover:opacity-75">
+        <i class="fa-brands fa-whatsapp text-[#25D366]"></i></a>
+      <a href=""   aria-label="Instagram"  class="hover:opacity-75">
+        <i class="fa-brands fa-instagram"></i></a>
+      <a href=""    aria-label="YouTube"    class="hover:opacity-75">
+        <i class="fa-brands fa-youtube text-[#ff0000]"></i></a>
+    </div>
+  </section>
+
+  <!-- === SEBI DISCLOSURE & COPYRIGHT --------------------------------------- -->
+  <section class="border-t border-white/10 py-6 px-6 md:px-12 text-xs md:text-sm leading-relaxed">
+
+    <p class="mb-2">
+      <strong>Data Sources:</strong> Select market, corporate-action, and order-book data are sourced
+      from dissemination platforms authorised by SEBI. SNQR complies with all SEBI circulars on data redistribution.
+    </p>
+
+    <p class="mb-4">
+      <strong>Legal Notice:</strong> Information provided herein is for educational and research
+      purposes only and does not constitute investment advice, an offer, or solicitation to buy or sell any security.
+      Past performance is not indicative of future results. Users should consult their financial advisor before acting
+      on any information. SNQR, its affiliates, and employees accept no liability for loss arising from use of this site.
+    </p>
+
+    <div class="text-center opacity-70">
+      © 2025 Saptanga Nupura Quant Research. All Rights Reserved.
+    </div>
+  </section>
+</footer>
+
+<!-- Bootstrap must be present for modals -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your app scripts (keep this order) -->
+<script src="./research.js"></script>
+<script src="./wizard.js" defer></script>
+<script src="./paper.js"></script>
+
+
+
+</body>
+</html>

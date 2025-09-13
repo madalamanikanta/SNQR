@@ -1,0 +1,154 @@
+/* --- Global fix for overlap & hairlines --- */
+*,*::before,*::after{ box-sizing:border-box }
+:root{
+  --header-height: 88px;
+  --gap-xxl: 96px;
+
+  --bg-start:#0b0b15; --bg-end:#17172e;
+  --text:#e9ecf1; --muted:#cbd2dc;
+
+  --accent1:#ff4db8; --accent2:#8e2de2; --focus:#00d4ff;
+
+  --glass: rgba(255,255,255,.07);
+  --card: rgba(255,255,255,.06);
+  --stroke: rgba(255,255,255,.14);
+  --divider: rgba(255,255,255,.14);
+
+  --r-xl: 22px; --r-lg: 14px; --r-md: 12px;
+  --shadow-s: 0 10px 30px rgba(0,0,0,.25);
+  --shadow-l: 0 22px 70px rgba(0,0,0,.5);
+
+  --maxw-hero: 820px; --maxw-form: 600px;
+
+  --t: 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+html,body{height:100%}
+body{
+  margin:0; color:var(--text);
+  background: radial-gradient(circle at center, #1f0036, #000);;
+ padding-top: 10%;
+  font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+.snqr-page{ padding: var(--header-height) 24px calc(80px + env(safe-area-inset-bottom)); }
+
+/* Thin, subtle divider (no background break) */
+.snqr-divider{
+  height:1px; background: var(--divider); opacity:.28;
+  max-width: 1080px; margin: var(--gap-xxl) auto; border-radius: 999px;
+}
+
+/* Section pattern */
+.snqr-section{ padding:64px 0; }
+.snqr-center{text-align:center}
+.snqr-narrow{ max-width: 1000px; margin: 0 auto }
+
+.snqr-header{ max-width: var(--maxw-hero); margin: 0 auto 22px }
+.snqr-eyebrow{ color: rgba(255,255,255,.72); letter-spacing:.22em; font-size:12px; text-transform:uppercase; margin-bottom:8px }
+.snqr-display{ font-family:"Times New Roman", Times, serif; font-size: clamp(34px, 4.6vw, 56px); line-height:1.1; margin:0 0 10px }
+.snqr-uline{ width:140px; height:3px; margin:12px auto 16px; border-radius:999px; background: linear-gradient(90deg, var(--accent1), var(--accent2)) }
+.snqr-lede{ font-family:"Times New Roman", Times, serif; font-size: clamp(18px, 2.2vw, 24px); line-height:1.55; color:var(--muted); max-width:60ch; margin:0 auto }
+.snqr-hint{ font-size:12px; color:var(--muted) }
+
+/* Buttons */
+.snqr-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:24px }
+.snqr-btn{
+  appearance:none; border:1px solid var(--stroke); background: var(--glass);
+  color:var(--text); padding:14px 20px; border-radius:999px; cursor:pointer; font-weight:600;
+  box-shadow: var(--shadow-s); transition: transform var(--t), border-color var(--t), background var(--t);
+  backdrop-filter: saturate(1.1) blur(6px);
+}
+.snqr-btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.26) }
+.snqr-btn:disabled{ opacity:.6; cursor:not-allowed; transform:none }
+.snqr-btn-primary{ background: linear-gradient(135deg, rgba(255,77,184,.42), rgba(138,125,255,.36)); border-color: transparent }
+.snqr-btn-outline{ background: transparent; border-color: rgba(255,255,255,.22) }
+
+/* FAQ surface */
+.snqr-surface{ background:var(--card); border:1px solid var(--stroke); border-radius: var(--r-xl); padding:28px; box-shadow: var(--shadow-s) }
+.snqr-faq-wrap{ max-width:880px; margin:0 auto }
+.snqr-faq{ display:flex; flex-direction:column; gap:14px }
+.snqr-faq-item{ background:var(--card); border:1px solid var(--stroke); border-radius:var(--r-lg); box-shadow:var(--shadow-s); overflow:hidden }
+.snqr-faq-head{ position:relative; padding:16px 18px 38px; cursor:pointer }
+.snqr-faq-q{ margin:0; font-size:18px }
+.snqr-faq-learn{ position:absolute; bottom:10px; left:18px; font-size:13px; color:var(--muted); display:flex; gap:6px }
+.snqr-faq-body{ display:none; padding: 0 18px 18px; color:var(--muted) }
+.snqr-faq-item.open .snqr-faq-body{ display:block } .snqr-faq-item.open .snqr-faq-learn{ color:#9de1ff }
+
+/* Overlay / Wizards */
+.snqr-ov{
+  position: fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:24px;
+  background:
+    radial-gradient(900px 480px at 20% 10%, rgba(255,77,184,.20), transparent 60%),
+    radial-gradient(900px 480px at 80% 10%, rgba(138,125,255,.22), transparent 60%),
+    linear-gradient(180deg, rgba(10,8,20,.86), rgba(10,8,20,.88));
+  backdrop-filter: blur(2px);
+}
+.snqr-ov.show{ display:flex; animation: snqrFade .18s ease-out both }
+@keyframes snqrFade{ from{opacity:0} to{opacity:1} }
+
+.snqr-modal{
+  width:100%; max-width:860px;
+  background: linear-gradient(180deg, rgba(36,38,64,.96), rgba(20,21,38,.96));
+  border:1px solid var(--stroke); border-radius: var(--r-xl); box-shadow: var(--shadow-l); overflow:hidden
+}
+.snqr-modal-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:16px 18px; border-bottom:1px solid var(--stroke) }
+.snqr-modal-title{ font-family:"Times New Roman", Times, serif; font-size:22px; margin:0 }
+.snqr-modal-close{ appearance:none; border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:22px }
+.snqr-modal-body{ padding:18px; display:flex; gap:18px; flex-wrap:wrap }
+
+/* Stepper */
+.snqr-stepper{ width:220px; min-width:220px; border-right:1px solid var(--stroke); padding-right:14px }
+.snqr-steps{ list-style:none; margin:0; padding:0; display:grid; gap:10px; color:var(--muted); font-size:14px }
+.snqr-steps li{ display:grid; grid-template-columns:22px 1fr; gap:10px; align-items:center }
+.snqr-dot{ width:18px; height:18px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--stroke); background:rgba(255,255,255,.05); font-size:12px }
+.snqr-steps li.active .snqr-dot{ background:var(--accent2); color:#111; border-color:transparent; font-weight:700 }
+.snqr-steps li.done .snqr-dot{ background:#38d996; color:#111; border-color:transparent }
+.snqr-steps li.active, .snqr-steps li.done{ color:var(--text) }
+
+/* Forms */
+.snqr-form{ flex:1; min-width:280px; max-width:var(--maxw-form) }
+.snqr-field{ margin-bottom:14px }
+.snqr-label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px }
+
+/* Critical: prevent inner seams & overlaps */
+.snqr-input,.snqr-select,.snqr-textarea{
+  display:block;
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.05);
+  background-clip: padding-box;   /* 🔧 kills vertical “cuts” */
+  color:var(--text);
+  outline:none;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.snqr-input:focus,.snqr-select:focus,.snqr-textarea:focus{ border-color: rgba(255,255,255,.28); box-shadow:0 0 0 3px rgba(0,212,255,.14) }
+.snqr-textarea{ min-height:110px; resize:vertical }
+
+/* Grid (renamed from .row to avoid collisions) */
+.snqr-grid-two{ display:grid; grid-template-columns:1fr 1fr; gap:16px }
+@media (max-width:640px){ .snqr-grid-two{ grid-template-columns:1fr } .snqr-stepper{ display:none } }
+
+.snqr-choices{ display:flex; flex-wrap:wrap; gap:10px }
+.snqr-chip{ position:relative; display:inline-flex; align-items:center; padding:10px 12px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.05); cursor:pointer; user-select:none }
+.snqr-chip input{ position:absolute; inset:0; opacity:0 }
+.snqr-chip.active{ background: linear-gradient(135deg, rgba(255,77,184,.35), rgba(138,125,255,.25)); border-color:transparent }
+
+.snqr-form-actions{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:8px }
+.snqr-btn-next,.snqr-btn-prev,.snqr-btn-submit{
+  padding:12px 16px; border-radius:10px; border:1px solid var(--stroke); background:var(--glass); color:var(--text); cursor:pointer;
+  transition: transform var(--t), border-color var(--t)
+}
+.snqr-btn-next:hover,.snqr-btn-prev:hover,.snqr-btn-submit:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.25) }
+.snqr-btn-submit.snqr-btn-primary{ background: linear-gradient(135deg, rgba(255,77,184,.42), rgba(138,125,255,.36)); border-color:transparent }
+
+.snqr-consent{ border-radius:10px; padding:10px 12px }
+.snqr-success{ text-align:center; padding:28px 18px }
+.snqr-ticket{ font-size:20px; font-weight:700; margin-top:8px }
+
+/* Reveal (no layout shift) */
+.snqr-reveal{ opacity:0; transform: translateY(14px); transition: opacity 500ms var(--t), transform 600ms var(--t) }
+.snqr-reveal.snqr-in{ opacity:1; transform:none }

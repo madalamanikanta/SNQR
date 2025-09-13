@@ -1,0 +1,65 @@
+{
+  "categories": [
+    {
+      "slug": "flagship",
+      "name": "Flagship",
+      "blurb": "The compass for India and global markets — where economics, governance, and diplomacy converge into strategic foresight.",
+      "logo": "/research/assets/flagship-logo.png",
+      "tileImage": "/assets/research/tiles/flagship.jpg",
+      "heroImage": "/assets/research/hero/flagship.jpg",
+      "division descriptions": {
+        "Arc of Markets Research":"Mapping the tides of India and global capital equities, credit, FX, commodities to anticipate shifts before they break.",
+        "Engines of State Research": "Where fiscal choices, central bank resolve, and institutional will collide with market psychology.",
+        "Diplomatic Frontiers Research": "Exploring how treaties, rivalries, and strategic dialogues redraw economic geographies.",
+        "Futurecrafting Research": "Scanning for emerging disruptions from technological arcs to demographic realignments that will define the decades ahead."
+      },
+      "divisions": [
+        "Arc of Markets Research",
+        "Engines of State Research",
+        "Diplomatic Frontiers Research",
+        "Futurecrafting Research"
+      ]
+    },
+    {
+      "slug": "signature",
+      "name": "Signature",
+      "blurb": "A lens on the great theatres of power — blocs, resources, climate, and industries shaping the century’s balance of influence.",
+      "logo": "/research/assets/signature-logo.png",
+      "tileImage": "/assets/research/tiles/signature.jpg",
+      "heroImage": "/assets/research/hero/signature.jpg",
+      "division descriptions": {
+        "Clubs of Influence Research":"Dissecting BRICS, NATO, SCO, and other alignments as architectures of trade, security, and capital flows.",
+        "Resource Geopolitics Research":"Oil, gas, and critical minerals as the true currency of power in contested markets.",
+        "The Carbon & climatic Market Ledger":"Tracking carbon, climate finance, and adaptation as the new sovereign balance sheet of nations.",
+        "Industria Nova Research":"The frontier battlegrounds — AI, defence, semiconductors, biotech — where policy and industry entwine."
+      },
+      "divisions": [
+        "Clubs of Influence Research",
+        "Resource Geopolitics Research",
+        "The Carbon & climatic Market Ledger Research",
+        "Industria Nova Research"
+      ]
+    
+    },
+    {
+      "slug": "lab",
+      "name": "SNQR Lab & Editorials",
+      "blurb": "The forge of signals and methods — decoding markets through statistics, microstructure, and quantum frontiers.",
+      "logo": "/research/assets/lab-logo.png",
+      "tileImage": "/assets/research/tiles/lab.jpg",
+      "heroImage": "/assets/research/hero/lab.jpg",
+      "division descriptions": {
+        "Quantum Horizons Research": "Applying quantum algorithms and hybrid models to unlock finance’s hardest puzzles.",
+        "Statistical Arsenal Research": "Factor engines, regime models, and volatility systems built for conviction in uncertainty.",
+        "Market Resonance Research": "Decoding liquidity rhythms, microstructure frictions, and the periodicity of asset classes.",
+        "Signal Architecture Research": "Harnessing alt-data, NLP, and algorithmic intelligence to extract patterns hidden from consensus."
+      },
+      "divisions": [
+        "Quantum Horizons Research",
+        "Statistical Arsenal Research",
+        "Market Resonance Research",
+        "Signal Architecture Research"
+      ]
+    }
+  ]
+}

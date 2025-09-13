@@ -1,0 +1,941 @@
+/* =========================================================
+   SNQR Research — unified CSS (Index / Category / Division)
+   Theme preserved. + Home tile centering, mobile header menu,
+   silky editors ribbon & latest loop.
+   ========================================================= */
+
+:root{
+  --snqr-bg: radial-gradient(1200px 800px at 20% 10%, rgba(123,47,247,0.15), transparent 60%),
+             radial-gradient(1200px 900px at 80% 90%, rgba(241,7,163,0.12), transparent 60%),
+             #0b0a14;
+  --snqr-surface: rgba(40, 20, 65, 0.55);
+  --snqr-border: rgba(255,255,255,.08);
+  --snqr-accent-1: #b478f1;
+  --snqr-accent-2: #f107a3;
+  --snqr-text: #e7e7ee;
+  --snqr-subtle: #b9b9c8;
+
+  --radius-xl: 20px;
+  --radius-md: 12px;
+
+  --shadow-1: 0 10px 30px rgba(0,0,0,.35);
+  --shadow-2: 0 20px 60px rgba(0,0,0,.35);
+
+  --header-h: 70px;
+  --editors-h: 48px;
+  --ticker-row: 64px;
+}
+
+/* ---- Base ---- */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  color-scheme: dark;
+  background: var(--snqr-bg);
+  background-attachment: fixed;
+  color: var(--snqr-text);
+  font: 14.5px/1.45 "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  letter-spacing:.2px;
+}
+img{ max-width:100%; display:block }
+a{ color:inherit; text-decoration:none }
+a:hover{ text-decoration:underline }
+.sr-only{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden }
+
+/* ---- Surfaces / buttons ---- */
+.glass{
+  background: var(--snqr-surface);
+  border:1px solid var(--snqr-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: saturate(1.1) blur(10px);
+}
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:.5rem; padding:10px 14px;
+  border-radius:999px; cursor:pointer;
+  border:1px solid var(--snqr-border);
+  background: rgba(255,255,255,.05);
+  color:#fff; font-weight:600;
+  transition: background .2s, border-color .2s, transform .05s;
+}
+.btn:hover{ background: rgba(255,255,255,.08) }
+.btn:active{ transform: translateY(1px) }
+.btn--primary{
+  background: linear-gradient(180deg, var(--snqr-accent-1), var(--snqr-accent-2));
+  border-color: transparent;
+}
+.btn--outline{ background: transparent }
+.btn--ghost{ background: transparent; border-color: var(--snqr-border) }
+
+.badge{
+  display:inline-block; padding:.15rem .5rem;
+  border:1px solid var(--snqr-border); border-radius:999px;
+  font-size:.8rem; color: var(--snqr-subtle);
+}
+
+/* ---- Editors’ Picks (seamless text ribbon) ---- */
+.editors-bar{
+  position:sticky; top:0; z-index:1000;
+  height: var(--editors-h);
+  background: rgba(8,8,16,.92);
+  border-bottom:1px solid var(--snqr-border);
+  backdrop-filter: saturate(1.1) blur(10px);
+}
+.editors-marquee{
+  position:relative; height:100%; overflow:hidden; white-space:nowrap;
+}
+.editors-list{
+  list-style:none; margin:0; padding:.5rem .75rem;
+  display:flex; align-items:center; gap:48px;
+  position:absolute; top:0; left:0; will-change: transform;
+}
+#editorsListClone{ position:absolute; top:0; left:0; will-change: transform; }
+.editors-item{ flex:0 0 auto; padding:0; background:transparent; border:0 }
+.editors-item .title{ font-weight:700; margin:0; line-height:1.25; max-width:80ch; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.editors-item .meta{ margin-left:.4rem; color:var(--snqr-subtle); font-size:.9rem }
+
+/* ---- Topbar ---- */
+.snqr-topbar{
+  position: sticky; top: var(--editors-h); z-index: 999;
+  height: var(--header-h);
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 18px;
+  background: rgba(14,10,24,.66);
+  border-bottom:1px solid var(--snqr-border);
+  backdrop-filter: saturate(1.1) blur(10px);
+}
+.topbar__left, .topbar__right{ display:flex; align-items:center; gap:14px }
+.topbar__right{ flex:1 } /* allow search to grow */
+
+.icon-link,.libhome{
+  display:flex; align-items:center; justify-content:center;
+  width:38px; height:38px; border-radius:10px; border:1px solid var(--snqr-border);
+  color:#fff;
+}
+.icon-link svg, .libhome svg{ width:20px; height:20px }
+.icon-link svg path, .libhome svg path{ stroke: currentColor }
+
+.brand{ display:flex; align-items:center; gap:10px; padding-left:6px }
+.brand__logo{ width:132px; height:auto }
+
+.nav{ display:flex; align-items:center; gap:6px; margin-left:12px }
+.nav__link{
+  padding:9px 12px; border-radius:10px; border:1px solid transparent; font-weight:600;
+}
+.nav__link:hover{ background: rgba(255,255,255,.06) }
+.nav__link.is-active{ border-color: var(--snqr-border); background: rgba(255,255,255,.08) }
+
+/* Mobile menu (hamburger) */
+.btn-menu{ display:none }
+@media (max-width: 900px){
+  .btn-menu{ display:inline-flex }
+  .nav{
+    position:absolute; left:12px; right:12px; top:calc(100% + 8px);
+    display:none; flex-direction:column; align-items:flex-start; gap:8px;
+    padding:10px; border-radius:14px; box-shadow: var(--shadow-1);
+    background: rgba(12,10,22,.96); border:1px solid var(--snqr-border);
+  }
+  .nav.is-open{ display:flex }
+}
+
+/* Search (fluid desktop + mobile reveal) */
+.search{ position:relative; display:flex; align-items:center; gap:8px; flex:1; min-width:160px }
+.search input[type="search"]{
+  width: 100%;
+  padding: 10px 12px; border-radius: 999px; border:1px solid var(--snqr-border);
+  background: rgba(255,255,255,.06); color:#fff; outline:none;
+}
+#btnSearch{ white-space:nowrap }
+@media (max-width: 900px){
+  .search input[type="search"]{ width:0; opacity:0; pointer-events:none; transition: width .25s ease, opacity .2s ease }
+  .search.is-open input[type="search"]{ width:100%; opacity:1; pointer-events:auto }
+  #btnSearch{
+    width:38px; height:38px; padding:0; border-radius:999px; text-indent:-9999px; overflow:hidden; position:relative;
+  }
+  #btnSearch::before{
+    content:""; position:absolute; inset:0; margin:auto; width:18px; height:18px;
+    background: no-repeat center/18px 18px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23e7e7ee' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  }
+}
+
+/* Typeahead dropdown */
+.typeahead{
+  position:absolute; top: calc(100% + 6px); left:0; width:100%; z-index: 2000;
+  background: rgba(12,10,22,.96); border:1px solid var(--snqr-border); border-radius:12px; box-shadow: var(--shadow-1);
+}
+.typeahead__list{ list-style:none; margin:0; padding:.4rem }
+.typeahead__item{ padding:.5rem .6rem; border-radius:10px; cursor:pointer }
+.typeahead__item.is-active, .typeahead__item:hover{ background: rgba(255,255,255,.06) }
+.ta-title{ font-weight:600; margin:0 0 .1rem }
+.ta-meta{ color:var(--snqr-subtle); font-size:.88rem }
+.typeahead__more{ padding:.5rem .6rem; border-top:1px solid var(--snqr-border); color:var(--snqr-subtle); cursor:pointer }
+.typeahead__more:hover{ background: rgba(255,255,255,.06) }
+
+/* ---- Heroes ---- */
+.core-hero, .cat-hero{
+  display:grid; grid-template-columns:1.15fr .85fr; gap:24px; align-items:stretch;
+  padding: 28px 20px 18px;
+  background: transparent;
+}
+.core-hero__copy, .cat-hero__copy{ padding: 8px 6px }
+.kicker{ color: var(--snqr-subtle); text-transform:uppercase; letter-spacing:.18em; font-size:.85rem; margin:0 0 6px }
+.core-hero h1, .cat-hero h1{ margin:.2em 0 .35em; font-size: clamp(28px, 4vw, 44px); line-height:1.1 }
+.deck{ color: var(--snqr-subtle); margin:.1rem 0 1rem }
+
+.cat-hero__image{
+  border-radius: var(--radius-xl); border:1px solid var(--snqr-border);
+  background-size: cover; background-position:center; min-height: 240px;
+  opacity:0; transition:opacity .25s ease;
+}
+.cat-hero__image.is-loaded{ opacity:1 }
+
+.divisions{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px }
+.chip{ display:inline-block; padding:.4rem .7rem; border-radius:999px; border:1px solid var(--snqr-border); background:rgba(255,255,255,.03); font-weight:600 }
+.chip:hover{ background: rgba(255,255,255,.08) }
+.chip.is-active{ background: rgba(255,255,255,.12) }
+
+/* ---- Filters (sticky) ---- */
+.filters{
+  position: sticky;
+  top: calc(var(--editors-h) + var(--header-h));
+  z-index: 998;
+  background: rgba(11,10,20,.75);
+  border-top:1px solid var(--snqr-border);
+  border-bottom:1px solid var(--snqr-border);
+  backdrop-filter: saturate(1.1) blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), inset 0 -1px 0 rgba(0,0,0,.25);
+}
+.filters__inner{ padding:10px 18px }
+.filters__row{ display:flex; gap:14px; align-items:center; flex-wrap:wrap }
+.filters__row--actions{ justify-content:flex-end }
+.chip-select label{ display:block; color:var(--snqr-subtle); font-size:.85rem; margin-bottom:4px }
+
+/* ---- Layout ---- */
+.layout{
+  display:grid; grid-template-columns: minmax(0,1fr) 360px;
+  gap: 18px; padding: 14px 18px 36px;
+  background: transparent;
+}
+
+/* ---- Index tiles (centered logo/title) ---- */
+.tiles{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:16px }
+.tile{
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:14px; padding:18px;
+  border-radius: var(--radius-xl); border:1px solid var(--snqr-border);
+  background: rgba(255,255,255,.03);
+}
+.tile__logo{ width:64px; height:64px; object-fit:contain; filter: drop-shadow(0 6px 18px rgba(0,0,0,.35)) }
+.tile__title{ margin:0; font-size:1.25rem }
+.tile__deck{ color:var(--snqr-subtle); margin:.35rem 0 1rem; text-align:left; align-self:stretch } /* keep second text as-is */
+.tile .btn{ padding:9px 16px; font-size:.95rem } /* slightly smaller Learn More */
+
+/* ---- Result grid ---- */
+.result{ min-width:0 }
+.grid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px }
+.card{
+  position:relative;
+  border-radius: var(--radius-xl); border:1px solid var(--snqr-border);
+  background: rgba(255,255,255,.03); overflow:hidden; display:flex; flex-direction:column;
+}
+.card__media{ aspect-ratio: 16/9; background: #0e1220 }
+.card__body{ padding: 12px 14px }
+.card__title{ margin:0 0 .25rem; font-size:1.05rem; line-height:1.25 }
+.card__deck{ color:var(--snqr-subtle); margin:0 0 .5rem; display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+.card__meta{ display:flex; gap:.5rem; flex-wrap:wrap; color:var(--snqr-subtle); font-size:.88rem }
+.card__footer{ display:flex; gap:10px; padding: 10px 14px 14px; margin-top:auto }
+
+/* Favorite heart */
+.heart{
+  position:absolute; top:8px; right:8px; z-index:2;
+  width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+  border-radius:999px; border:1px solid var(--snqr-border);
+  background: rgba(0,0,0,.35); color:#fff; cursor:pointer; backdrop-filter: blur(6px);
+}
+.heart svg{ width:18px; height:18px; fill:none; stroke:#fff; stroke-width:1.6 }
+.heart.is-active{ background: linear-gradient(180deg, var(--snqr-accent-1), var(--snqr-accent-2)) }
+.heart.is-active svg{ fill:#fff; stroke:#fff }
+
+/* Skeleton */
+@keyframes snqr-shimmer{ 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+.skeleton .skeleton__block,.skeleton .skeleton__line,.skeleton .skeleton__chip{
+  background-image:linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.12), rgba(255,255,255,.05));
+  background-size:200% 100%; animation: snqr-shimmer 1.1s linear infinite; border-radius:.4rem
+}
+.skeleton__block{ aspect-ratio:16/9 }
+.skeleton__line{ height:16px; margin:.4rem 0 }
+.skeleton__line--short{ width:60% }
+.skeleton__chip{ display:inline-block; height:18px; width:90px; margin:.2rem .3rem .2rem 0; border-radius:999px }
+
+/* ---- Right rail ---- */
+.rail-col{ display:flex; flex-direction:column; gap:16px }
+.rail{ padding: 12px }
+.rail__title{ margin:.2rem 0 .6rem; font-size:1.02rem }
+.rail__copy{ color:var(--snqr-subtle); margin:.2rem 0 .8rem }
+.rail__note{ color:var(--snqr-subtle); margin:.4rem 0 0 }
+
+/* Latest Research: smooth infinite loop (transform) */
+.ticker{
+  position:relative; overflow:hidden;
+  border:1px solid var(--snqr-border); border-radius: var(--radius-xl);
+  background: rgba(255,255,255,.03); height: calc(6 * var(--ticker-row));
+}
+.latest{ list-style:none; margin:0; padding:.25rem; position:absolute; left:0; top:0; width:100%; will-change: transform }
+#latestTickerClone{ position:absolute; left:0; top:0; width:100%; will-change: transform }
+.latest li{
+  min-height: var(--ticker-row);
+  display:flex; flex-direction:column; justify-content:center;
+  border-bottom:1px solid var(--snqr-border); padding:.5rem .8rem
+}
+.latest li:last-child{ border-bottom:none }
+.latest .title{ font-weight:600; margin:0 0 .1rem 0; line-height:1.25; display:-webkit-box; -webkit-line-clamp:1; line-clamp:1; -webkit-box-orient:vertical; overflow:hidden }
+.latest .meta{ display:flex; gap:.6rem; flex-wrap:wrap; color:var(--snqr-subtle); font-size:.86rem }
+
+/* Subscribe */
+.subscribe{ display:flex; gap:8px }
+.subscribe input[type="email"]{
+  flex:1; min-width:0; padding:10px 12px; border-radius:999px; border:1px solid var(--snqr-border);
+  background: rgba(255,255,255,.06); color:#fff; outline:none;
+}
+
+/* Suggest modal */
+.btn-suggest{ margin-top:1rem }
+.modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.5); z-index:2000 }
+.modal.is-open{ display:flex }
+.modal__dialog{ position:relative; width:min(720px, 92vw); padding:1rem 1.25rem; border-radius:var(--radius-xl) }
+.modal__close{ position:absolute; right:1rem; top:1rem; background:transparent; border:0; font-size:1.1rem; color:#fff; cursor:pointer }
+.modal__deck{ color:var(--snqr-subtle); margin:.25rem 0 1rem }
+.form-row{ display:flex; flex-direction:column; gap:.4rem; margin:.5rem 0 }
+.form-row input,.form-row textarea{
+  padding:.6rem .7rem; border-radius:.6rem; border:1px solid var(--snqr-border);
+  background:rgba(255,255,255,.06); color:#fff; outline:none
+}
+.form-hint{ font-size:.85rem; color:var(--snqr-subtle); margin-top:.25rem }
+.form-status{ margin-top:.6rem; color:var(--snqr-subtle) }
+
+/* Footer */
+.footer{ padding: 18px; border-top:1px solid var(--snqr-border); background: rgba(10,10,20,.6) }
+.footer__inner{ max-width:1400px; margin:0 auto; color:var(--snqr-subtle) }
+
+/* Pager */
+.pager{ margin-top:16px; display:flex; gap:12px; align-items:center }
+.pager__btn{ padding:8px 12px; border-radius:999px; border:1px solid var(--snqr-border); background:transparent; color:#fff; cursor:pointer }
+.pager__btn[disabled]{ opacity:.5; cursor:not-allowed }
+.pager__label{ color:var(--snqr-subtle) }
+
+/* ---- Responsive ---- */
+@media (max-width: 1280px){
+  .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .layout{ grid-template-columns: minmax(0,1fr) 340px; }
+}
+@media (max-width: 1024px){
+  .core-hero, .cat-hero{ grid-template-columns: 1fr; }
+  .layout{ grid-template-columns: 1fr; }
+  .rail-col{ order:-1 }
+  .tiles{ grid-template-columns: 1fr; }
+}
+@media (max-width: 720px){
+  .brand__logo{ width:120px }
+  .grid{ grid-template-columns: 1fr }
+}
+/* ---- Off-canvas drawer (mobile menu) ---- */
+.drawer{ position:fixed; inset:0; display:none; z-index:3000; }
+.drawer.is-open{ display:block; }
+.drawer__scrim{ position:absolute; inset:0; background:rgba(0,0,0,.45); backdrop-filter:blur(2px); }
+.drawer__panel{
+  position:absolute; right:0; top:0; height:100%; width:min(360px,86vw);
+  background: rgba(12,10,22,.96);
+  border-left:1px solid var(--snqr-border);
+  box-shadow: var(--shadow-2);
+  padding:14px; overflow:auto;
+  display:flex; flex-direction:column; gap:12px;
+}
+.drawer__title{ margin:.1rem 0 .6rem; font-size:1.05rem; font-weight:700 }
+.drawer__section{ border-top:1px solid var(--snqr-border); padding-top:10px; margin-top:8px }
+.drawer__section .menu{ position:static; display:block; }
+.drawer__section .btn{ width:100% }
+
+/* Mobile header buttons (unchanged look) */
+.snqr-mobile-btn{
+  display:none; align-items:center; justify-content:center;
+  width:38px; height:38px; border-radius:10px; border:1px solid var(--snqr-border);
+  background:transparent; color:#fff; cursor:pointer;
+}
+@media (max-width: 720px){
+  .snqr-mobile-btn{ display:flex }
+  .snqr-topbar .search{ display:none } /* search shown via icon */
+  .snqr-topbar .sort-inline,
+  .snqr-topbar #btnToggleSaved,
+  .snqr-topbar .profile { display:none } /* moved into drawer */
+}
+/* ---------- Suggestion wizard (inline) ---------- */
+.sug-wiz{
+  margin-top: 16px;
+  padding: 16px 18px;
+}
+.sug-wiz__head{ text-align:left; }
+.sug-wiz__title{
+  margin:.2rem 0 .3rem;
+  font-size: clamp(20px, 2vw, 24px);
+}
+.sug-wiz__dash{
+  height:2px; width:120px; margin:.25rem 0 .6rem;
+  background: linear-gradient(90deg, var(--snqr-accent-1), var(--snqr-accent-2));
+  border-radius:999px;
+}
+.sug-wiz__deck{
+  color: var(--snqr-subtle);
+  margin: .2rem 0 1rem;
+}
+
+.sug-wiz__form{
+  display:grid; grid-template-columns: 1fr 1fr; gap:12px;
+}
+.sug-wiz__row{ display:flex; flex-direction:column; gap:.4rem }
+.sug-wiz__row--full{ grid-column: 1 / -1 }
+.sug-wiz__row input, .sug-wiz__row textarea{
+  padding:.6rem .7rem; border-radius:.6rem; border:1px solid var(--snqr-border);
+  background:rgba(255,255,255,.06); color:#fff; outline:none;
+}
+.sug-wiz__hint{ font-size:.85rem; color:var(--snqr-subtle); margin-top:.25rem }
+.sug-wiz__actions{
+  grid-column: 1 / -1;
+  display:flex; align-items:center; gap:10px; margin-top:2px;
+}
+.sug-wiz__status{ color: var(--snqr-subtle) }
+
+@media (max-width: 720px){
+  .sug-wiz__form{ grid-template-columns: 1fr; }
+}
+/* === Core (home) tiles: big centered logo, title underneath === */
+body[data-page="core"] .tiles{
+  /* keep 3-up on desktop, collapse as your existing media queries dictate */
+  grid-template-columns: repeat(3, minmax(0,1fr));
+}
+
+body[data-page="core"] .tile{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:12px;
+  padding:26px;
+}
+
+body[data-page="core"] .tile__content{ padding:0 }
+
+body[data-page="core"] .tile__header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;              /* space between logo and title */
+  margin-bottom:8px;
+}
+
+/* ⬇️ Make the logo large and centered */
+body[data-page="core"] .tile__logo{
+  width: 112px;          /* adjust: 96–128px looks great too */
+  height: 112px;
+  object-fit: contain;
+  margin: 6px 0 2px;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.35));
+}
+
+/* Title just below logo */
+body[data-page="core"] .tile__title{
+  font-size: clamp(24px, 2.4vw, 30px);
+  margin: 0;
+}
+
+/* Keep copy readable and centered */
+body[data-page="core"] .tile__deck{
+  max-width: 56ch;
+  font-size: 1rem;
+  margin:.35rem 0 .75rem;
+}
+
+/* We’re not using the right-hand tile image here */
+body[data-page="core"] .tile__image{
+  display:none;
+}
+
+/* Slightly smaller CTA, still on brand */
+body[data-page="core"] .tile .btn{
+  padding:10px 18px;
+}
+/* === Core (home) tiles: 3 across on desktop, 2 on medium, 1 on small === */
+body[data-page="core"] .tiles{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* desktop: 3 across */
+  gap: 16px;
+}
+
+/* medium screens: 2 across */
+@media (max-width: 1280px){
+  body[data-page="core"] .tiles{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* small screens: stack 1 by 1 */
+@media (max-width: 880px){
+  body[data-page="core"] .tiles{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* keep the centered, big-logo presentation */
+body[data-page="core"] .tile{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; gap:12px; padding:26px;
+}
+body[data-page="core"] .tile__header{
+  display:flex; flex-direction:column; align-items:center; gap:12px; margin-bottom:8px;
+}
+body[data-page="core"] .tile__logo{
+  width:112px; height:112px; object-fit:contain; margin:6px 0 2px;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.35));
+}
+body[data-page="core"] .tile__title{ font-size:clamp(24px,2.4vw,30px); margin:0; }
+body[data-page="core"] .tile__deck{ max-width:56ch; font-size:1rem; margin:.35rem 0 .75rem; }
+body[data-page="core"] .tile__image{ display:none; }   /* hide the side image on home tiles */
+body[data-page="core"] .tile .btn{ padding:10px 18px; } /* slightly compact CTA */
+
+
+/* ---------- Mobile header: fixed centered brand (non-clickable), icons left/right ---------- */
+@media (max-width: 880px){
+  .snqr-topbar{
+    position: sticky;
+    top: var(--editors-h);
+    z-index: 999;
+  }
+
+  /* keep the two home icons on the left, don’t wrap */
+  .snqr-topbar .topbar__left{
+    flex-wrap: nowrap;
+    gap: 8px;
+    z-index: 3;              /* above the centered brand */
+  }
+
+  /* center the brand visually, never capture clicks */
+  .snqr-topbar .brand{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;    /* logo is not a link on mobile */
+    margin: 0;               /* no layout push */
+    z-index: 1;              /* under the buttons */
+  }
+  .snqr-topbar .brand__logo{
+    width: 104px;            /* tweak: 96–112 works well */
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* right-side icons (search + 3 dots) stay clickable */
+  .snqr-topbar .topbar__right{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 4;              /* above the centered brand */
+  }
+  /* make sure your icon buttons are solid tap targets */
+  .snqr-topbar .btn--icon,
+  .snqr-topbar #btnMobileSearch,
+  .snqr-topbar #btnMobileMenu{
+    width: 38px; height: 38px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:10px;
+    border:1px solid var(--snqr-border);
+    background: transparent;
+  }
+
+  /* hide wide desktop UI on mobile */
+  .snqr-topbar .nav,
+  .snqr-topbar .search,
+  .snqr-topbar .sort-inline,
+  .snqr-topbar #btnToggleSaved{
+    display: none !important;
+  }
+}
+
+/* ======================================================================= */
+/* === Mobile: place rail after content + put "Latest Research" as last === */
+/* ======================================================================= */
+/* We DO NOT touch HTML or JS. We only change placement on small screens.
+   1) Keep using grid, but define areas so content stacks first, rail second.
+   2) Inside .rail-col, flip its two children so "Latest Research" is last. */
+@media (max-width: 1024px){
+  /* 1) Make .layout stack content then rail, reliably */
+  .layout{
+    display: grid;                 /* stays grid on mobile */
+    grid-template-columns: 1fr;    /* single column */
+    grid-template-rows: auto auto; /* two rows: content then rail */
+    grid-template-areas:
+      "content"
+      "rail";
+  }
+  /* assign areas without knowing exact left content wrapper class */
+  .layout > .rail-col{ grid-area: rail; }
+  .layout > :not(.rail-col){ grid-area: content; }
+
+  /* 2) Inside the rail: ensure Latest is the last block before footer.
+        Assumes DOM order is:
+          .rail:nth-of-type(1)  → Latest Research
+          .rail:nth-of-type(2)  → Subscribe (or other block)
+     If your DOM differs, swap the order values accordingly. */
+  .rail-col{ display:flex; flex-direction:column; }
+  .rail-col .rail:nth-of-type(1){ order: 2; } /* Latest Research → last */
+  .rail-col .rail:nth-of-type(2){ order: 1; } /* Subscribe (or other) → first */
+}
+/* ======================================================================= */
+/* =========================================================
+   SNQR Articles — block + directory (non-invasive add-on)
+   ========================================================= */
+
+/* Shared layout for the Articles block container */
+#articlesBlock {
+  margin: 16px 18px;
+}
+
+/* Parent research card in the block */
+#articlesParentCard.card {
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+#articlesParentCard .card__media {
+  aspect-ratio: 16/9;
+  background-size: cover;
+  background-position: center;
+}
+#articlesParentCard .card__body { padding: 12px 14px; }
+#articlesParentCard .card__title {
+  margin: 0 0 .25rem; font-size: 1.05rem; line-height: 1.25;
+}
+#articlesParentCard .card__meta {
+  display: flex; gap: .5rem; flex-wrap: wrap;
+  color: var(--snqr-subtle); font-size: .88rem;
+}
+#articlesParentCard .card__footer {
+  padding: 10px 14px 14px; margin-top: auto;
+}
+
+/* Right side Article list */
+#articlesList { padding-right: 6px; }
+.article-item {
+  display: grid; grid-template-columns: auto 1fr; gap: 10px;
+  align-items: center; padding: 10px 6px;
+  border-bottom: 1px solid var(--snqr-border);
+}
+.article-item:last-child { border-bottom: none; }
+.article-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: linear-gradient(180deg, var(--snqr-accent-1), var(--snqr-accent-2));
+}
+.article-title { font-weight: 700; margin: 0 0 2px; line-height: 1.2; }
+.article-meta  { color: var(--snqr-subtle); font-size: .9rem; }
+
+/* Prev/Next buttons inside Articles block */
+#articlesPrev, #articlesNext {
+  width: 40px; height: 40px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--snqr-border); background: transparent; color: #fff;
+}
+#articlesPrev svg, #articlesNext svg { width: 18px; height: 18px; }
+
+/* Directory page group */
+#articlesDirectory { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+@media (max-width: 1024px){
+  #articlesDirectory { grid-template-columns: 1fr; }
+}
+.group.glass { padding: 12px; }
+.group__head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.group__title { font-weight: 800; }
+.group__meta { color: var(--snqr-subtle); font-size: .9rem; }
+.group__list { list-style: none; margin: .6rem 0 0; padding: 0; }
+.group__list li { padding: .5rem 0; border-bottom: 1px solid var(--snqr-border); }
+.group__list li:last-child { border-bottom: none; }
+.group__list a:hover { text-decoration: underline; }
+
+/* Make the Articles block compact on small screens */
+@media (max-width: 1024px){
+  #articlesBlock { margin: 14px 12px; }
+}
+/* ===== SNQR Articles (block + directory) — additive styles ===== */
+
+#articlesBlock { margin: 16px 18px; }
+
+#articlesParentCard.card { display:flex; flex-direction:column; overflow:hidden; }
+#articlesParentCard .card__media { aspect-ratio:16/9; background-size:cover; background-position:center; }
+#articlesParentCard .card__body { padding: 12px 14px; }
+#articlesParentCard .card__title { margin:0 0 .25rem; font-size:1.05rem; line-height:1.25; }
+#articlesParentCard .card__meta { display:flex; gap:.5rem; flex-wrap:wrap; color:var(--snqr-subtle); font-size:.88rem; }
+#articlesParentCard .card__footer { padding: 10px 14px 14px; margin-top:auto; }
+
+#articlesList { padding-right: 6px; }
+.article-item { display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:center; padding:10px 6px; border-bottom:1px solid var(--snqr-border); }
+.article-item:last-child { border-bottom:none; }
+.article-dot { width:8px; height:8px; border-radius:50%; background:linear-gradient(180deg, var(--snqr-accent-1), var(--snqr-accent-2)); }
+.article-title { font-weight:700; margin:0 0 2px; line-height:1.2; }
+.article-meta { color:var(--snqr-subtle); font-size:.9rem; }
+
+#articlesPrev, #articlesNext { width:40px; height:40px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--snqr-border); background:transparent; color:#fff; }
+#articlesPrev svg, #articlesNext svg { width:18px; height:18px; }
+
+#articlesDirectory { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px; }
+@media (max-width:1024px){ #articlesDirectory { grid-template-columns:1fr; } }
+.group.glass { padding:12px; }
+.group__head { display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.group__title { font-weight:800; }
+.group__meta { color:var(--snqr-subtle); font-size:.9rem; }
+.group__list { list-style:none; margin:.6rem 0 0; padding:0; }
+.group__list li { padding:.5rem 0; border-bottom:1px solid var(--snqr-border); }
+.group__list li:last-child { border-bottom:none; }
+.group__list a:hover { text-decoration:underline; }
+
+@media (max-width:1024px){ #articlesBlock { margin:14px 12px; } }
+
+/* ===== SNQR Articles (block + directory) — additive styles ===== */
+
+/* (A) Rotating Articles block (Index/Category/Division) */
+#articlesBlock { margin: 16px 18px; }
+
+/* (B) Parent research card */
+#articlesParentCard.card { display:flex; flex-direction:column; overflow:hidden; }
+#articlesParentCard .card__media { aspect-ratio:16/9; background-size:cover; background-position:center; }
+#articlesParentCard .card__body { padding: 12px 14px; }
+#articlesParentCard .card__title { margin:0 0 .25rem; font-size:1.05rem; line-height:1.25; }
+#articlesParentCard .card__meta { display:flex; gap:.5rem; flex-wrap:wrap; color:var(--snqr-subtle); font-size:.88rem; }
+#articlesParentCard .card__footer { padding: 10px 14px 14px; margin-top:auto; }
+
+/* (C) Article list items */
+#articlesList { padding-right: 6px; }
+.article-item { display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:center; padding:10px 6px; border-bottom:1px solid var(--snqr-border); }
+.article-item:last-child { border-bottom:none; }
+.article-dot { width:8px; height:8px; border-radius:50%; background:linear-gradient(180deg, var(--snqr-accent-1), var(--snqr-accent-2)); }
+.article-title { font-weight:700; margin:0 0 2px; line-height:1.2; }
+.article-meta { color:var(--snqr-subtle); font-size:.9rem; }
+
+/* (D) Prev/Next in block */
+#articlesPrev, #articlesNext { width:40px; height:40px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--snqr-border); background:transparent; color:#fff; }
+#articlesPrev svg, #articlesNext svg { width:18px; height:18px; }
+
+/* (E) Articles directory grid — show 6–10 parents per page; 3 columns desktop */
+#articlesDirectory { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; }
+@media (max-width: 1200px){ #articlesDirectory { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+@media (max-width: 768px){  #articlesDirectory { grid-template-columns:1fr; } }
+
+/* Each parent box uniform height; internal list scrolls after 4 items */
+:root { --article-row-h: 56px; }
+.group.glass { padding:12px; display:flex; flex-direction:column; min-height: calc( var(--article-row-h) * 6 ); } /* uniform card height */
+.group__head { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:6px; }
+.group__title { font-weight:800; }
+.group__meta { color:var(--snqr-subtle); font-size:.9rem; }
+.group__list { list-style:none; margin:0; padding:0; overflow:auto; max-height: calc( var(--article-row-h) * 4 + 4px ); }
+.group__list li { display:flex; flex-direction:column; justify-content:center; min-height: var(--article-row-h); padding:.25rem 0; border-bottom:1px solid var(--snqr-border); }
+.group__list li:last-child { border-bottom:none; }
+.group__list a:hover { text-decoration:underline; }
+
+/* (F) Icon button (bolt) in header */
+.btn-icon { width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center; padding:0; border-radius:999px; }
+.btn-icon i { font-size:1rem; }
+
+/* (G) Compact margins on small screens */
+@media (max-width:1024px){ #articlesBlock { margin:14px 12px; } }
+
+
+/* =========================================================
+   SNQR — Global Typography Overrides (Research section)
+   Requirements:
+   1) All main titles in research/article boxes = bold
+   2) Entire research pages use white text (except the white article-read page)
+   3) Article page titles are bold
+   4) Font = Times New Roman across research
+   --------------------------------------------------------- */
+
+/* 4) Typeface — apply everywhere this stylesheet is loaded */
+body {
+  font-family: "Times New Roman", Times, serif !important;
+}
+
+/* 2) Force WHITE text on all research pages that are NOT the white article reader */
+body:not([data-page="article-read"]) {
+  color: #ffffff !important;
+}
+body:not([data-page="article-read"]) * {
+  color: #ffffff !important;
+  /* keep opacity-driven subtlety from your theme if you use it; this just forces base color */
+}
+
+/* Links remain white; rely on underline/hover for affordance */
+body:not([data-page="article-read"]) a { color: #ffffff !important; }
+
+/* 1) Main headers of research boxes & article boxes — make bold */
+.card__title,
+.group__title,
+.article-title,
+.tile__title,
+.rail__title,
+.hero h1,
+.hero .title,
+.glass h1,
+.glass h2,
+.glass h3 {
+  font-weight: 800 !important; /* heavy, readable on dark */
+}
+
+/* If any title elements were given lighter weights earlier, override them here */
+[class*="__title"], [class*="--title"] { font-weight: 800 !important; }
+
+/* 3) Individual Article page titles should also be bold (but keep their page colors) */
+body[data-page="article-read"] .article-title,
+body[data-page="article-read"] .content h1,
+body[data-page="article-read"] .content h2 {
+  font-weight: 800 !important;
+}
+
+/* Optional: ensure directory list links stay strong & readable */
+#articlesDirectory .group__list a,
+#articlesList .article-title {
+  font-weight: 800 !important;
+}
+
+/* =========================================================
+   Articles Home — visual fixes (scoped)
+   ========================================================= */
+
+/* 1) Right-rail "Latest Research" text should be normal (not bold) on Articles page */
+body[data-page="articles-home"] .rail .latest a,
+body[data-page="articles-home"] .rail .latest li a,
+body[data-page="articles-home"] .rail .latest .item-title {
+  font-weight: 400 !important;
+  color: #ffffff !important;
+}
+
+/* 2) Distinguish the parent research header vs. its article list */
+body[data-page="articles-home"] .group.glass {
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04); /* same family as site panels */
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+body[data-page="articles-home"] .group__head {
+  padding: 10px 10px 8px;
+  margin: -12px -12px 8px;                  /* full-bleed head inside card */
+  background: rgba(255,255,255,0.06);       /* slightly brighter than body */
+  border-bottom: 1px solid var(--snqr-border);
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+body[data-page="articles-home"] .group__title {
+  font-size: 1.02rem;
+  line-height: 1.2;
+  font-weight: 800 !important;              /* keep parent title strong */
+  color: #fff !important;
+}
+body[data-page="articles-home"] .group__meta {
+  font-weight: 600;
+  color: rgba(255,255,255,.8) !important;
+}
+
+/* the list area (articles) */
+body[data-page="articles-home"] .group__list {
+  padding: 6px 8px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 10px;
+  max-height: calc(var(--article-row-h) * 4 + 6px); /* show 4, then scroll */
+  overflow: auto;
+}
+body[data-page="articles-home"] .group__list li {
+  min-height: var(--article-row-h);
+  border-bottom: 1px solid var(--snqr-border);
+}
+body[data-page="articles-home"] .group__list li:last-child { border-bottom: 0; }
+body[data-page="articles-home"] .group__list a {
+  color: #fff !important;
+  font-weight: 700 !important;              /* article titles bold and clear */
+}
+
+/* 3) Auto-scroll feel like Latest: smooth scrollbars visual */
+body[data-page="articles-home"] .group__list::-webkit-scrollbar { width: 6px; }
+body[data-page="articles-home"] .group__list::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25); border-radius: 6px;
+}
+body[data-page="articles-home"] .group__list:hover::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); }
+
+/* 4) Pagination: dark/transparent with white type */
+body[data-page="articles-home"] #articlesPager .pagination .page-link,
+body[data-page="articles-home"] #articlesPagerBottom .pagination .page-link {
+  background: transparent !important;
+  color: #ffffff !important;
+  border-color: var(--snqr-border) !important;
+}
+body[data-page="articles-home"] #articlesPager .pagination .page-link:hover,
+body[data-page="articles-home"] #articlesPagerBottom .pagination .page-link:hover {
+  background: rgba(255,255,255,0.08) !important;
+}
+body[data-page="articles-home"] #articlesPager .pagination .active .page-link,
+body[data-page="articles-home"] #articlesPagerBottom .pagination .active .page-link {
+  background: rgba(255,255,255,0.14) !important;
+  color: #ffffff !important;
+  border-color: var(--snqr-border) !important;
+}
+
+:root { --snqr-panel-solid: #1b1427; }
+
+/* Solid dark modal everywhere */
+#ideaModal .modal-content {
+  background-color: var(--snqr-panel-solid) !important;
+  color: #fff !important;
+  backdrop-filter: none !important;
+}
+#ideaModal .modal-header, 
+#ideaModal .modal-footer { border-color: var(--snqr-border) !important; }
+
+#ideaModal .form-label { color: #fff !important; }
+#ideaModal .form-control {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: var(--snqr-border) !important;
+  color: #fff !important;
+}
+#ideaModal .form-control::placeholder { color: rgba(255,255,255,0.75) !important; }
+.modal-backdrop.show { opacity: .6; }
+
+/* Non-clickable step indicator */
+.wiz-steps { display:flex; gap:12px; list-style:none; padding:0; margin:0 0 12px; }
+.wiz-steps li { padding:6px 10px; border-radius:999px; background:rgba(255,255,255,0.08); color:#fff; font-weight:700; font-size:.9rem; }
+.wiz-steps li.active { background:rgba(255,255,255,0.18); }
+
+/* Validation feedback */
+#ideaModal .is-invalid { border-color:#ff6b6b !important; }
+#ideaModal .is-invalid:focus { box-shadow:0 0 0 .2rem rgba(255,107,107,.25) !important; }
+
+/* Bulb glow */
+#btnIdea i.fa-lightbulb {
+  color:#ffe680; text-shadow:0 0 6px rgba(255,230,128,.9),0 0 12px rgba(255,230,128,.6),0 0 18px rgba(255,230,128,.35);
+}
+#btnIdea:hover i.fa-lightbulb { filter: drop-shadow(0 0 6px rgba(255,230,128,.9)); }
+
+
+/* === SNQR Articles: auto-scrolling title reel (Index/Category/Division) === */
+:root{
+  /* visible rows and row height for the article reel */
+  --article-row-h: 56px;
+  --articles-visible-rows: 5;
+}
+
+/* Articles reel must not use native smooth scroll while animating */
+#articlesList { overflow-y:auto; -webkit-overflow-scrolling:touch; scroll-behavior:auto !important; }
+
+/* Optional soft fades (match your panel bg) */
+#articlesList::before, #articlesList::after{
+  content:""; position:absolute; left:0; right:0; height:16px; pointer-events:none; z-index:1;
+}
+#articlesList::before{ top:0;    background:linear-gradient(#140a1f,transparent); }
+#articlesList::after { bottom:0; background:linear-gradient(transparent,#140a1f); }

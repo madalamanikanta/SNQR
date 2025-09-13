@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Realistic Earth Globe</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      /* background: radial-gradient(circle at center, #1f0036, #000); */
+    }
+
+    #globe-container {
+      width: 100%;
+      height: 100%;
+      /* background: radial-gradient(circle at center, #1f0036, #000); */
+    }
+  </style>
+
+  <!-- Animation Libraries -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+  <div id="globe-container"></div>
+
+  <script src="https://unpkg.com/three"></script>
+  <script src="https://unpkg.com/globe.gl"></script>
+  <script>
+    const container = document.getElementById('globe-container');
+
+    const world = Globe()(container)
+      // .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg')
+      .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-day.jpg')
+      .bumpImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
+      .showAtmosphere(false)
+      .backgroundColor('rgba(0,0,0,0)')
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointColor('color')
+      .pointAltitude(d => d.size * 0.02)
+      .pointRadius(0.3)
+      .pointResolution(12)
+      .pointsData([
+        { lat: 37.7749, lng: -122.4194, size: 1, color: 'red' },
+        { lat: 28.6139, lng: 77.2090, size: 1, color: 'blue' },
+        { lat: 51.5074, lng: -0.1278, size: 1, color: 'green' }
+      ]);
+
+    // Auto rotate setup
+    const controls = world.controls();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1;
+    controls.enableZoom = false;
+    controls.enablePan = true;
+    controls.enableRotate = true;
+    controls.dampingFactor = 0.1;
+    controls.enableDamping = true;
+    world.camera().position.z = 400;
+
+    // Fix camera distance (globe size stays fixed)
+    world.camera().position.z = 400;
+
+    // Improve responsiveness
+    window.addEventListener('resize', () => {
+      world.renderer().setSize(window.innerWidth, window.innerHeight);
+      world.camera().aspect = window.innerWidth / window.innerHeight;
+      world.camera().updateProjectionMatrix();
+    });
+
+    world.renderer().setPixelRatio(window.devicePixelRatio);
+    world.renderer().setSize(window.innerWidth, window.innerHeight);
+    // world.scene().fog = null;
+  </script>
+
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+
+    // Optional GSAP sample animation
+    gsap.from(".hero", {
+      opacity: 0,
+      y: 60,
+      duration: 1.5,
+      ease: "power3.out"
+    });
+  </script>
+</body>
+</html>

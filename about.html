@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Saptanga Nupura Quant Research (SNQR)</title>
+
+  <!-- Core assets already in your stack -->
+  <link rel="stylesheet" href="/templet/assets/css/heading.css">
+  <link rel="stylesheet" href="/templet/assets/css/landing_page.css">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet"
+  />
+<link rel="stylesheet" href="/templet/assets/css/about.css">
+ 
+
+   <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"/>
+
+  <!-- Meta -->
+  <meta name="description" content="SNQR — Our Foundations Story, Vision, Mission, What We Do, How We Do It, Values & Commitments, Leadership, and Founder’s Note.">
+</head>
+<body class="snqr-body">
+<script>
+(()=>{ if(customElements.get('snqr-header')) return;
+
+class SnqrHeader extends HTMLElement{
+  constructor(){ super(); this.attachShadow({mode:'open'}); this._spacer=null; }
+
+  connectedCallback(){
+    const active =(this.getAttribute('active')||'home').toLowerCase();
+    const logo   =(this.getAttribute('logo')  || '/templet/pics/logo.png');
+    const pubsEP =(this.getAttribute('pubs')  || '/research/data/publications.json');
+    const catsEP =(this.getAttribute('cats')  || '/research/data/categories.json');
+    const homeEP =(this.getAttribute('home')  || '/home.html');
+    const joinEP =(this.getAttribute('join')  || '/join-collection.html');
+    const serveEP=(this.getAttribute('serve') || '/What-We-Serve.html');
+
+    const s=this.shadowRoot;
+    s.innerHTML=`
+      <style>
+        :host{ position:fixed; top:0; left:0; right:0; z-index:2147483000; display:block }
+        .band{ width:100vw; margin-inline:calc(50% - 50vw) }
+
+        :host{
+          --amber1:#d47920; --amber2:#8c430e;
+          --green1:#0f5e1d; --green2:#093f13;
+          --char:#0f0b14; --char2:#14101b;
+          --ink:#FFFAF2; --inkSub:#ffdcb8;
+          --ivory:#f6f3ff; --ivorySub:#cbbfe9; --mint:#f5fff6;
+          --stroke:rgba(255,255,255,.10); --panel:rgba(16,14,18,.96);
+          --accent:#7b6cff; --accent2:#a99cff;
+          --zPanel:2147483001; --zModal:2147483002;
+          --hTop:32px; --hMain:68px; --hBot:32px;
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        }
+        *{ box-sizing:border-box } button{ font:inherit }
+
+        /* saffron ticker */
+        .saff{ height:var(--hTop); overflow:hidden;
+          background:linear-gradient(180deg,var(--amber1),var(--amber2)),
+            repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 2px,transparent 2px 10px),
+            repeating-linear-gradient(-45deg,rgba(0,0,0,.14) 0 2px,transparent 2px 10px);
+          border-bottom:1px solid rgba(255,255,255,.1) }
+        .loop{ display:flex; gap:32px; height:100%; animation:loop 55s linear infinite }
+        .copy{ display:flex; gap:32px; align-items:center; white-space:nowrap; padding:0 18px }
+        .saff .item a{ color:var(--ink); font-weight:800; text-decoration:none; text-shadow:0 1px 0 rgba(0,0,0,.35) }
+        .saff .meta{ color:var(--inkSub); margin-left:8px; font-size:.86rem; font-weight:700 }
+        .saff:hover .loop{ animation-play-state:paused }
+
+        /* main bar */
+        .main{ height:var(--hMain); display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 16px; color:var(--ivory);
+          background:linear-gradient(180deg,#111018,var(--char)),
+            repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 2px,transparent 2px 10px),
+            repeating-linear-gradient(-45deg,rgba(0,0,0,.25) 0 2px,transparent 2px 10px);
+          border-bottom:1px solid rgba(255,255,255,.08) }
+        .left,.right{ display:flex; align-items:center; gap:10px }
+        .logo{ height:36px; width:auto; display:block }
+        .icon{ width:40px; height:40px; border-radius:12px; display:grid; place-items:center; color:var(--ivory);
+          border:1px solid var(--stroke); background:transparent; cursor:pointer }
+        .link{ padding:10px 12px; border-radius:10px; text-decoration:none; color:var(--ivory); border:1px solid transparent; font-weight:600 }
+        .link:hover{ background:var(--char2); border-color:var(--stroke) }
+        .link[aria-current="page"]{ outline:2px solid rgba(99,102,241,.35); outline-offset:0 }
+        .disabled{ opacity:.55; cursor:not-allowed }
+
+        /* desktop search */
+        .searchForm{ display:flex; align-items:center; gap:8px; min-width:28%; flex:1 1 42% }
+        .searchForm input{ width:100%; height:44px; border-radius:999px; padding:0 14px;
+          border:1px solid var(--stroke); background:rgba(255,255,255,.06); color:#fff; font-size:16px }
+        .btn{ height:44px; padding:0 16px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.08); color:#fff; cursor:pointer }
+        .btnAccent{ background:linear-gradient(180deg, rgba(212,121,32,.30), rgba(99,102,241,.22)); border-color:rgba(255,255,255,.18) }
+
+        /* green ticker */
+        .green{ height:var(--hBot); overflow:hidden;
+          background:linear-gradient(180deg,var(--green1),var(--green2)),
+            repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 2px,transparent 2px 10px),
+            repeating-linear-gradient(-45deg,rgba(0,0,0,.18) 0 2px,transparent 2px 10px);
+          border-top:1px solid rgba(255,255,255,.10) }
+        .green .loop{ animation:loop 60s linear infinite }
+        .green .item{ color:var(--mint); font-weight:800; text-decoration:none; text-shadow:0 1px 0 rgba(0,0,0,.35) }
+
+        /* panels */
+        .panel{ position:fixed; display:none; z-index:var(--zPanel); background:var(--panel); color:#f4f2ff;
+          border:1px solid rgba(255,255,255,.12); border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.45) }
+        .panel.open{ display:block }
+        .mega{ width:min(86vw,1100px); max-height:min(74vh,780px); overflow:auto; padding:16px }
+        .dd{ width:320px; padding:8px }
+
+        /* Library mega — 3 columns: category title then divisions */
+        #pLib.mega.research{ padding:18px }
+        .libGrid{ display:grid; grid-template-columns:repeat(3,minmax(240px,1fr)); gap:18px }
+        .libCol{ padding:12px; border:1px solid rgba(255,255,255,.10); border-radius:14px; background:rgba(255,255,255,.03) }
+        .libHead{ font-weight:800; color:var(--accent2); margin-bottom:10px;
+                  border-bottom:2px solid rgba(123,108,255,.35); padding-bottom:6px }
+        .divList{ list-style:none; padding:0; margin:0 }
+        .divList li a{ display:block; padding:.54rem .7rem; border-radius:10px; color:#f0edff; text-decoration:none;
+                       border:1px solid transparent }
+        .divList li a:hover{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16) }
+
+        .dd a{ display:block; padding:.6rem .8rem; border-radius:10px; color:#f4f2ff; text-decoration:none; border:1px solid transparent }
+        .dd a:hover{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.14) }
+
+        /* mobile, typeahead, overlays, wizard (unchanged behavior) */
+        .ta{ position:fixed; display:none; max-width:620px; z-index:var(--zPanel); background:var(--panel); border:1px solid rgba(255,255,255,.12); border-radius:12px; box-shadow:0 14px 40px rgba(0,0,0,.45) }
+        .ta.open{ display:block } .ta ul{ list-style:none; margin:0; padding:6px 0; max-height:60vh; overflow:auto }
+        .ta li{ padding:.65rem .95rem; cursor:pointer } .ta li:hover,.ta li.is-active{ background:rgba(255,255,255,.06) }
+        .ta .title{ font-weight:700 } .ta .meta{ color:#cbbfe9; font-size:.9rem } .ta mark{ background:rgba(255,153,51,.25); color:inherit }
+
+        .ov{ position:fixed; inset:0; display:none; grid-template-rows:auto 1fr; background:rgba(6,4,10,.78); backdrop-filter:blur(8px); z-index:var(--zModal) }
+        .ov.open{ display:grid } .ovBox{ margin:16px auto 10px; width:min(96vw,820px); background:var(--panel); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:14px }
+        .ovRow{ display:flex; gap:10px; align-items:center }
+        .ovBox input{ flex:1 1 auto; height:52px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); color:#fff; padding:0 14px; font-size:18px }
+        .ovBtn{ height:52px; padding:0 18px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.10); color:#fff; font-weight:700 }
+        .ovClose{ width:44px; height:44px; border-radius:12px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.10); color:#fff; font-size:18px }
+        .ovResults{ margin:0 auto; width:min(96vw,820px); background:var(--panel); border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden }
+        .ovResults ul{ list-style:none; margin:0; padding:8px 0; max-height:66vh; overflow:auto }
+        .ovResults li{ padding:.8rem 1rem; border-bottom:1px solid rgba(255,255,255,.05) } .ovResults li:last-child{ border-bottom:0 }
+        .ovResults a{ color:#fff; text-decoration:none; display:block } .ovResults .meta{ color:#cbbfe9; font-size:.95rem }
+
+        .modal{ position:fixed; inset:0; display:none; place-items:center; background:rgba(6,4,10,.78); backdrop-filter:blur(8px); z-index:var(--zModal) }
+        .modal.open{ display:grid }
+        .card{ width:min(760px,96vw); background:var(--panel); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:18px; color:#f4f2ff; box-shadow:0 24px 80px rgba(0,0,0,.55) }
+        .steps{ display:flex; gap:8px; margin-bottom:12px } .step.on{ background:linear-gradient(90deg, rgba(212,121,32,.9), rgba(99,102,241,.45)) }
+        .form{ display:grid; gap:12px } .row{ display:flex; gap:12px } .row>*{ flex:1 1 0 }
+        .inp,.sel{ width:100%; background:rgba(255,255,255,.06); color:#fff; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:12px 14px; outline:none; font-size:16px }
+        .tarea{ min-height:120px; resize:vertical; width:100%; background:rgba(255,255,255,.06); color:#fff; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:12px 14px; font-size:16px }
+        .actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:8px } .ghost{ height:44px; padding:0 18px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.10); color:#fff; cursor:pointer; font-weight:700 }
+
+        .mOnly{ display:none }
+        @media (max-width:980px){
+          .main{ position:relative; justify-content:center }
+          .left{ position:absolute; left:8px; gap:8px }
+          .right{ position:absolute; right:8px; gap:8px }
+          .logo{ height:32px }
+          .link#origins,.link#library,.link#join,.link#ai,.link#serve{ display:none }
+          .searchForm{ display:none } .mOnly{ display:grid }
+        }
+
+        @keyframes loop{ 0%{ transform:translateX(0) } 100%{ transform:translateX(-50%) } }
+        @media (prefers-reduced-motion:reduce){ .loop{ animation:none !important } }
+      </style>
+
+      <!-- saffron ticker -->
+      <div class="saff band">
+        <div class="loop" id="topLoop">
+          <div class="copy" id="topA"></div>
+          <div class="copy" id="topB" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- main bar -->
+      <div class="main band">
+        <div class="left">
+          <a class="icon" href="${homeEP}" aria-label="Home">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4H9v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z" stroke="currentColor" stroke-width="1.6"/></svg>
+          </a>
+
+          <a class="icon mOnly" href="/research/index.html" aria-label="SNQR Library">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+              <rect x="4" y="4" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="14" y="4" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="4" y="14" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="14" y="14" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+            </svg>
+          </a>
+
+          <button class="icon mOnly" id="mSearch" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.2-3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+
+          <a href="${homeEP}" aria-label="SNQR Home"><img class="logo" alt="SNQR" src="${logo}"></a>
+
+          <a class="link" id="origins" href="/about.html">Origins</a>
+          <span class="link disabled" id="ai" title="Coming soon">SNQR AI (Coming soon)</span>
+
+          <a class="link" id="library" href="/research/index.html" aria-haspopup="true">SNQR Library</a>
+          <a class="link" id="serve" href="${serveEP}" aria-haspopup="true">What We Serve</a>
+          <a class="link" id="join" href="${joinEP}" aria-haspopup="true">Join the Collective</a>
+        </div>
+
+        <div class="right">
+          <form class="searchForm" id="searchForm" role="search" novalidate>
+            <input id="q" type="search" placeholder="Search SNQR research…" aria-expanded="false" aria-controls="ta">
+            <button class="btn" id="go" type="submit">Search</button>
+          </form>
+
+          <button class="btn btnAccent" id="connect" title="Connect">Connect</button>
+          <a class="btn" id="login" href="/login.html" style="text-decoration: none;">Login</a>
+
+          <button class="icon mOnly" id="more" aria-label="More">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- panels -->
+      <div class="panel mega research" id="pLib"></div>
+      <div class="panel dd"   id="pOrg"></div>
+      <div class="panel dd"   id="pServe"></div>
+      <div class="panel dd"   id="pJoin"></div>
+      <div class="panel dd"   id="pMore"></div>
+
+      <!-- green ticker -->
+      <div class="green band">
+        <div class="loop" id="botLoop">
+          <div class="copy" id="botA"></div>
+          <div class="copy" id="botB" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- typeahead & overlays -->
+      <div class="ta" id="ta"></div>
+
+      <div class="ov" id="sOV" aria-modal="true" role="dialog" aria-label="Search">
+        <div class="ovBox">
+          <div class="ovRow">
+            <input id="qm" type="search" placeholder="Search SNQR research...">
+            <button class="ovBtn" id="sSubmit">Search</button>
+            <button class="ovClose" id="sClose" aria-label="Close">✕</button>
+          </div>
+        </div>
+        <div class="ovResults"><ul id="mResults"></ul></div>
+      </div>
+
+      <div class="modal" id="wiz" aria-modal="true" role="dialog" aria-label="Connect">
+        <div class="card" id="wizCard">
+          <div class="steps"><div class="step on" id="wS1"></div><div class="step" id="wS2"></div></div>
+          <form class="form" id="wForm">
+            <div id="wP1">
+              <div class="row">
+                <div><input class="inp" id="wName" placeholder="Your Name" required></div>
+                <div><input class="inp" id="wEmail" type="email" placeholder="Email" required></div>
+              </div>
+              <div class="row">
+                <div><input class="inp" id="wOrg" placeholder="Organization (optional)"></div>
+                <div><input class="inp" id="wRole" placeholder="Role (optional)"></div>
+              </div>
+              <div class="actions"><button type="button" class="ghost" id="wNext">Next</button></div>
+            </div>
+            <div id="wP2" style="display:none">
+              <div class="row">
+                <div>
+                  <select class="sel" id="wReason" required>
+                    <option value="">Reason to connect…</option>
+                    <option>Research Access</option><option>Consulting / Advisory</option>
+                    <option>Partnership / Collaboration</option><option>Media / Speaking</option>
+                    <option>Careers / Join the Collective</option><option>Other</option>
+                  </select>
+                </div>
+              </div>
+              <textarea class="tarea" id="wNotes" placeholder="Tell us a line about your use-case (optional)"></textarea>
+              <div class="actions">
+                <button type="button" class="ghost" id="wBack">Back</button>
+                <button type="submit" class="ghost" style="background:rgba(255,255,255,.12)">Send</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+
+    /* ===== utils ===== */
+    const $  =(sel,root=s)=>root.querySelector(sel);
+    const $$ =(sel,root=s)=>Array.from(root.querySelectorAll(sel));
+    const esc=t=>String(t||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const fmt=d=>d?new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'}):'';
+    const re =t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const hi =(t,q)=>q?esc(t).replace(new RegExp('('+re(q)+')','ig'),'<mark>$1</mark>'):esc(t);
+    const slugify=(s)=>String(s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+
+    // Override public display names while we continue reading existing JSON slugs
+    const HEAD_OVERRIDES={ flagship:'Standard SNQR Research', signature:'SNQR Signature', lab:'SNQR Quant & Quantum Lab' };
+
+    /* tickers + datasets */
+    const doctrine=[ "Quantitative Market Forensics","AI-Powered Geopolitical Risk","SNQR AI Terminal","Quantum-Driven Alpha Signals","Macro Systems Modeling","India-First, Globally Aligned","Sovereign-Grade Intelligence","Policy Transmission Analytics","Liquidity & Microstructure","Options Greeks Architecture","Delta-Hedged PnL Models","Factor Regime Detection","Risk Budgeting Frameworks","Stress & Tail Scenarios","Explainable AI Models","Data-to-Doctrine Pipelines","Research-Grade Backtesting","Real-Time Signal Extraction","Cross-Asset Correlation Maps","Event-Driven Macro Forensics","Supply-Chain Intelligence","Sanctions & Trade Flows","Election & Policy Watch","Energy & Commodities Matrix","Climate & Transition Risk","Financial Stability Radar","Bank & Credit Analytics","Capital Flows Observatory","FX & Rates Strategy","Equity & Derivatives Lab","Sovereign Risk Dashboards","Bharat Economic Arc™","Capital Currents™","SNQR Model Lab™","SNQR Investor Dispatch™","Standard SNQR Research","SNQR Signature","SNQR Quant & Quantum Lab","Governance & Compliance Intel","Enterprise Risk Architecture","Board-Ready Briefings","Institutional-Grade Methodology","Verified Data Lineage","Transparent Model Cards","Research You Can Audit","Actionable, Accountable Signals","We Quantify the Future","Markets. Policy. Geostrategy." ];
+    const state={ pubs:[], cats:[] };
+
+    Promise.allSettled([fetch(pubsEP),fetch(catsEP)]).then(async([p,c])=>{
+      try{ if(p.status==='fulfilled' && p.value.ok){ const j=await p.value.json(); state.pubs=j.publications||[]; } }catch{}
+      try{ if(c.status==='fulfilled' && c.value.ok){ const j=await c.value.json(); state.cats=j.categories||[]; } }catch{}
+    }).finally(()=>{
+      drawTopTicker(); drawBottomTicker(); drawPanels();
+      setupDesktopSearch(); setupMobileSearch(); setupConnect(); setupMore(); markActive(active);
+      this._installSpacer();
+    });
+
+    /* spacer */
+    this._installSpacer=()=>{
+      const total=()=>{
+        const cs=getComputedStyle(s.host);
+        return (parseInt(cs.getPropertyValue('--hTop'))||32)+
+               (parseInt(cs.getPropertyValue('--hMain'))||68)+
+               (parseInt(cs.getPropertyValue('--hBot'))||32);
+      };
+      if(!this._spacer){
+        this._spacer=document.createElement('div');
+        this._spacer.className='snqr-header-spacer';
+        this._spacer.style.height=total()+'px';
+        this.parentNode?.insertBefore(this._spacer, this);
+      }else{ this._spacer.style.height=total()+'px'; }
+      addEventListener('resize',()=>{ if(this._spacer) this._spacer.style.height=total()+'px'; }, {passive:true});
+    };
+
+    /* tickers */
+    function drawTopTicker(){
+      const picks=state.pubs.filter(p=>p.editorsPick);
+      const rows = picks.length ? picks :
+        state.pubs.slice().sort((a,b)=>new Date(b.publishDate)-new Date(a.publishDate)).slice(0,20);
+      if(!rows.length){ $('.saff').style.display='none'; return; }
+      const html = rows.map(p=>(
+        '<span class="item"><a href="'+(p.url||'#')+'">'+esc(p.title||'')+
+        '</a><span class="meta"> • '+fmt(p.publishDate)+(p.id?(' • '+esc(p.id)):'')+'</span></span>'
+      )).join('<span>  </span>');
+      $('#topA').innerHTML=html; $('#topB').innerHTML=html;
+    }
+    function drawBottomTicker(){
+      const html=doctrine.map(t=>'<span class="item">'+esc(t)+'</span>').join('<span>  </span>');
+      $('#botA').innerHTML=html; $('#botB').innerHTML=html;
+    }
+
+    /* panels + mega */
+    function placeBelow(trigger,panel){
+      const r=trigger.getBoundingClientRect();
+      const top=r.bottom+8, w=panel.offsetWidth||360;
+      panel.style.top=top+'px';
+      panel.style.left=Math.max(12, Math.min(r.left, innerWidth - w - 12))+'px';
+    }
+    function openPanel(t,p){ closePanels(); p.classList.add('open'); requestAnimationFrame(()=>placeBelow(t,p)); }
+    function closePanels(){ $$('.panel.open').forEach(p=>p.classList.remove('open')); }
+    addEventListener('scroll', closePanels, {passive:true});
+    addEventListener('keydown', e=>{ if(e.key==='Escape') closePanels(); });
+
+    const tLib=$('#library'), pLib=$('#pLib');
+    const tOrg=$('#origins'), pOrg=$('#pOrg');
+    const tJoin=$('#join'),   pJoin=$('#pJoin');
+    const tServe=$('#serve'), pServe=$('#pServe');
+
+    function renderCol(catSlug, cat){
+      const title = esc(HEAD_OVERRIDES[catSlug] || cat?.name || 'Category');
+      const list = (cat?.divisions||[]).map(d=>{
+        const name =(typeof d==='string')? d : (d.name||d.slug||'');
+        const dslug=(typeof d==='string')? slugify(d) : slugify(d.slug||d.name||'');
+        const cslug= encodeURIComponent(cat?.slug||catSlug);
+        return '<li><a href="/research/division.html?cat='+cslug+'&division='+encodeURIComponent(dslug)+'">'+esc(name)+'</a></li>';
+      }).join('') || '<li><a style="opacity:.7; pointer-events:none">No divisions yet</a></li>';
+      return '<div class="libCol"><div class="libHead">'+title+'</div><ul class="divList">'+list+'</ul></div>';
+    }
+
+    function drawPanels(){
+      if(pLib){
+        pLib.classList.add('research');
+        const cats=Array.isArray(state.cats)?state.cats:[];
+        // build a map by slug (fallback to slugified name)
+        const bySlug={}; for(const c of cats){ bySlug[(c.slug||slugify(c.name||''))||'']=c; }
+        const flagship = bySlug['flagship'] || null;
+        const signature= bySlug['signature']|| null;
+        const lab      = bySlug['lab']      || null;
+
+        pLib.innerHTML = '<div class="libGrid">'+
+          renderCol('flagship', flagship)+
+          renderCol('signature', signature)+
+          renderCol('lab', lab)+
+        '</div>';
+      }
+      if(pOrg){
+        pOrg.innerHTML=[
+          ["Our Story","#story"],["Our Vision","#vision"],["Our Mission","#mission"],["What We Do","#what-we-do"],
+          ["How We Do It","#how-we-do-it"],["Our Values & Commitments","#values"],["Leadership","#leadership"],["Founder’s Note","#founder-note"]
+        ].map(([t,h])=>'<a href="/about.html'+h+'">'+esc(t)+'</a>').join('');
+      }
+      if(pServe){
+        const items=[
+          ["Overview",                    "#hero"],
+          ["Quantum Architecture Grid",   "#grid"],
+          ["Dashboard Atlas",             "#dashboards"],
+          ["SNQR AI — Research Interface","#ai"],
+          ["Signature Dossiers",          "#dossiers"],
+          ["Who We Serve",                "#audiences"],
+          ["How We Work",                 "#process"],
+          ["Access Plans",                "#plans"],
+          ["Proof & Signals",             "#proof"]
+        ];
+        pServe.innerHTML = items.map(([t,h])=>'<a href="'+serveEP+h+'">'+esc(t)+'</a>').join('');
+      }
+      if(pJoin){
+        pJoin.innerHTML=[
+          ["Request access to SNQR AI","#sec-ai"],
+          ["Request a Business Appointment","#sec-appoint"],
+          ["Join the Dream with Us","#sec-careers"],
+          ["Share your idea of research","#sec-idea"],
+          ["FAQ","#sec-faq"]
+        ].map(([t,h])=>'<a href="/join-collection.html'+h+'">'+esc(t)+'</a>').join('');
+      }
+    }
+
+    [['mouseenter','focus','click'].forEach(ev=> tLib?.addEventListener(ev,()=>openPanel(tLib,pLib)))];
+    [['mouseenter','focus','click'].forEach(ev=> tOrg?.addEventListener(ev,()=>openPanel(tOrg,pOrg)))];
+    [['mouseenter','focus','click'].forEach(ev=> tJoin?.addEventListener(ev,()=>openPanel(tJoin,pJoin)))];
+    [['mouseenter','focus','click'].forEach(ev=> tServe?.addEventListener(ev,()=>openPanel(tServe,pServe)))];
+    [pLib,pOrg,pJoin,pServe].forEach(p=> p?.addEventListener('mouseleave', closePanels));
+
+    /* mobile "More" */
+    (function setupMore(){
+      const btn=$('#more'), pan=$('#pMore'); if(!btn||!pan) return;
+      pan.classList.add('dd');
+      pan.innerHTML=[
+        ['Home', homeEP],
+        ['What We Serve', serveEP],
+        ['— Dashboard Atlas', serveEP+'#dashboards'],
+        ['— How We Work',     serveEP+'#process'],
+        ['SNQR Library','/research/index.html'],
+        ['Origins → Our Story','/about.html#story'],
+        ['Join the Collective', joinEP],
+        ['SNQR AI (Coming soon)','']
+      ].map(([t,u])=> u?('<a href="'+u+'">'+esc(t)+'</a>'):'<a class="disabled" aria-disabled="true">'+esc(t)+'</a>').join('');
+      btn.addEventListener('click', e=>{ e.preventDefault(); openPanel(btn,pan); });
+      pan.addEventListener('mouseleave', closePanels);
+    })();
+
+    /* search */
+    function filterRows(q){
+      const n=(q||'').toLowerCase();
+      return (state.pubs||[]).filter(p =>
+        (p.title||'').toLowerCase().includes(n) ||
+        (p.deck ||'').toLowerCase().includes(n) ||
+        (p.id   ||'').toLowerCase().includes(n) ||
+        (p.division||'').toLowerCase().includes(n) ||
+        (String(p.cat||p.catSlug||'')).toLowerCase().includes(n)
+      );
+    }
+    function setupDesktopSearch(){
+      const form=$('#searchForm'), input=$('#q'), ta=$('#ta'); if(!form) return;
+      let t=null;
+      const render=q=>{
+        const needle=(q||'').trim();
+        ta.innerHTML=''; ta.classList.remove('open'); if(!needle) return;
+        const rows=filterRows(needle).slice(0,10);
+        const ul=document.createElement('ul');
+        ul.innerHTML=rows.map((p,i)=>(
+          '<li class="'+(i===0?'is-active':'')+'" data-url="'+(p.url||'#')+'">'+
+            '<div class="title">'+hi(p.title,needle)+'</div>'+
+            '<div class="meta">'+esc(p.division||'')+' • '+esc(p.cat||p.catSlug||'')+' • '+fmt(p.publishDate)+'</div>'+
+          '</li>'
+        )).join('') + '<li class="meta" data-more="1" style="cursor:pointer;padding:.65rem .95rem">View all results for “'+esc(needle)+'”</li>';
+        ta.appendChild(ul);
+        const r=input.getBoundingClientRect(); ta.style.left=r.left+'px'; ta.style.top=(r.bottom+6)+'px'; ta.classList.add('open');
+        ul.querySelectorAll('li[data-url]').forEach(li=> li.addEventListener('click',()=> location.href=li.getAttribute('data-url')));
+        const more=ul.querySelector('li[data-more]'); if(more) more.addEventListener('click',()=> location.href='/research/category.html?cat=all&q='+encodeURIComponent(needle));
+      };
+      input.addEventListener('input',e=>{ clearTimeout(t); t=setTimeout(()=>render(e.target.value),120); });
+      input.addEventListener('focus',()=> input.dispatchEvent(new Event('input')));
+      addEventListener('click',e=>{ if(!s.contains(e.target)) ta.classList.remove('open'); });
+      form.addEventListener('submit',e=>{
+        e.preventDefault(); const q=(input.value||'').trim();
+        if(q) location.href='/research/category.html?cat=all&q='+encodeURIComponent(q); else $('#mSearch')?.click();
+      });
+      input.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){
+          e.preventDefault();
+          const first=ta.querySelector('li[data-url]'); if(first) location.assign(first.getAttribute('data-url')); else form.requestSubmit();
+        }
+      });
+    }
+    function setupMobileSearch(){
+      const openBtn=$('#mSearch'), ov=$('#sOV'), closeBtn=$('#sClose'), inp=$('#qm'), submit=$('#sSubmit'), list=$('#mResults');
+      if(!openBtn) return;
+      const open=()=>{ ov.classList.add('open'); inp.value=''; list.innerHTML=''; setTimeout(()=>inp.focus(),40); };
+      const close=()=> ov.classList.remove('open');
+      const render=q=>{
+        const needle=(q||'').trim(); list.innerHTML=''; if(!needle) return;
+        const rows=filterRows(needle).slice(0,16);
+        list.innerHTML=rows.map(p=>(
+          '<li><a href="'+(p.url||'#')+'"><div class="title">'+hi(p.title,needle)+'</div>'+
+          '<div class="meta">'+esc(p.division||'')+' • '+esc(p.cat||p.catSlug||'')+' • '+fmt(p.publishDate)+'</div></a></li>'
+        )).join('') + '<li><a href="/research/category.html?cat=all&q='+encodeURIComponent(needle)+'">View all results for “'+esc(needle)+'”</a></li>';
+      };
+      openBtn.addEventListener('click',open);
+      closeBtn.addEventListener('click',close);
+      ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
+      inp.addEventListener('input',e=>render(e.target.value));
+      submit.addEventListener('click',()=>{ const q=(inp.value||'').trim(); if(q) location.href='/research/category.html?cat=all&q='+encodeURIComponent(q); });
+      addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+    }
+
+    function setupConnect(){
+      const btn=$('#connect'), modal=$('#wiz'), next=$('#wNext'), back=$('#wBack');
+      const p1=$('#wP1'), p2=$('#wP2'), s1=$('#wS1'), s2=$('#wS2'), form=$('#wForm');
+      const open=()=> modal.classList.add('open'); const close=()=> modal.classList.remove('open');
+      btn.addEventListener('click',e=>{ e.preventDefault(); open(); });
+      modal.addEventListener('click',e=>{ if(e.target===modal) close(); });
+      addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+      next.addEventListener('click',()=>{
+        if(!$('#wName').value.trim() || !$('#wEmail').value.trim()){ alert('Please fill name and email.'); return; }
+        p1.style.display='none'; p2.style.display='block'; s1.classList.remove('on'); s2.classList.add('on');
+      });
+      if(back) back.addEventListener('click',()=>{ p2.style.display='none'; p1.style.display='block'; s2.classList.remove('on'); s1.classList.add('on'); });
+      form.addEventListener('submit',e=>{
+        e.preventDefault();
+        const payload={
+          name:$('#wName').value.trim(), email:$('#wEmail').value.trim(),
+          org:$('#wOrg').value.trim(), role:$('#wRole').value.trim(),
+          reason:$('#wReason').value, notes:($('#wNotes').value||'').trim(),
+          ts:new Date().toISOString()
+        };
+        if(typeof window.snqrConnectSubmit==='function'){ window.snqrConnectSubmit(payload); close(); return; }
+        location.href='mailto:connect@snqrglobal.com?subject=SNQR Connect&body='+encodeURIComponent(JSON.stringify(payload,null,2));
+        setTimeout(close,300);
+      });
+    }
+
+    function markActive(a){
+      const map={origins:'#origins',library:'#library',join:'#join',serve:'#serve'};
+      if(map[a]) s.querySelector(map[a]).setAttribute('aria-current','page');
+    }
+  }
+
+  disconnectedCallback(){
+    if(this._spacer && this._spacer.parentNode) this._spacer.parentNode.removeChild(this._spacer);
+  }
+}
+
+customElements.define('snqr-header', SnqrHeader);
+})();
+</script>
+
+<!-- Use it -->
+<snqr-header
+  active="serve"             <!-- set to 'serve' on Services page; 'library' on library; 'home' etc. elsewhere -->
+  logo="/templet/pics/logo.png"
+  pubs="/research/data/publications.json"
+  cats="/research/data/categories.json"
+  home="/Home.html"
+  join="/join-collection.html"
+  serve="/What-We-Serve.html">
+</snqr-header>
+
+
+    <!-- ─── Symbol Search Modal ─── -->
+<div id="search-modal" class="search-modal">
+  <div class="modal-content">
+    <header>
+      <h2>Symbol Search</h2>
+      <span class="modal-close"><i class="fas fa-times"></i></span>
+    </header>
+
+    <input type="text" class="search-input" placeholder="Search symbols..." />
+
+    <div class="chips">
+      <button class="chip active" data-cat="All">All</button>
+      <button class="chip"       data-cat="Stocks">Global Stocks</button>
+      <button class="chip"       data-cat="Commodities">Commodity Market</button>
+      <button class="chip"       data-cat="FuturesOptions">Futures vs Options</button>
+      <button class="chip"       data-cat="Exchanges">Exchange Market</button>
+      <button class="chip"       data-cat="Economics">Economics & Geopolitics</button>
+    </div>
+
+
+    <div class="results-container"></div>
+  </div>
+</div>
+  <main id="main">
+    <!-- Our Foundations Story -->
+    <section id="foundation" class="about-section anchor-offset" data-aos="fade-up" data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <p class="kicker">About SNQR</p>
+          <h1 class="section-title">Our Foundations Story</h1>
+          <span class="decorative-line" aria-hidden="true"></span>
+        </header>
+
+        <div class="section-copy">
+          <p>In the grand courts of the Mauryan empire centuries before modern capital markets Kautilya composed the <em>Arthashastra</em>, a rigorous manual on the architecture of statecraft. At its core stood the doctrine of <strong>Saptanga</strong>: a sovereign as a living organism of seven interdependent limbs sovereign leadership, wise counsel, fertile territory, protective fortresses, a robust treasury, disciplined forces, and steadfast alliances.</p>
+          <p><strong>Saptanga Nupura Quant Research (SNQR)</strong> draws both name and method from this doctrine. Like the <strong>Nupura</strong> the anklet whose subtle resonance once animated a village’s commerce and culture we listen for faint, consequential signals that ripple through firms, markets, and sovereign systems. We exist because capital, policy, and enterprise are not governed by surface noise but by deep structures that rarely announce themselves.</p>
+          <p>Our purpose is to build the intelligence architecture India and the wider world will need to navigate the next quarter century. We stand at the intersection of classical statecraft and modern quantitative science, engineering frameworks that decode hidden dynamics across global corporates, strategic ecosystems, and transnational flows. Put simply: <strong>we quantify the small forces that reshape destinies</strong> so India, and our clients, are prepared not just for the next cycle, but for the next era.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vision -->
+    <section id="vision" class="about-section anchor-offset" data-aos="fade-up" data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <h2 class="section-title">Our Vision</h2>
+          <span class="decorative-line" aria-hidden="true"></span>
+        </header>
+        <p class="section-lede">To build <strong>sovereign-grade intelligence systems</strong> that guide capital, policy, and enterprise through a changing world.</p>
+      </div>
+    </section>
+
+    <!-- Mission -->
+    <section id="mission" class="about-section anchor-offset" data-aos="fade-up" data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <h2 class="section-title">Our Mission</h2>
+          <span class="decorative-line" aria-hidden="true"></span>
+        </header>
+        <p class="section-lede">To <strong>reveal hidden structural, financial, and geopolitical signals</strong> and convert them into insights that power <strong>enduring, high-conviction decisions</strong>.</p>
+      </div>
+    </section>
+
+    <!-- What We Do -->
+    <section id="what-we-do" class="about-section anchor-offset" data-aos="fade-up" data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <h2 class="section-title">What We Do</h2>
+          <span class="decorative-line" aria-hidden="true"></span>
+        </header>
+
+        <div class="section-copy">
+          <p>At <strong>SNQR</strong>, we decode the hidden architecture of markets, enterprises, and sovereign systems. We integrate <strong>quantitative forensics</strong>, <strong>macro-systems modeling</strong>, <strong>geopolitical intelligence</strong>, and <strong>advanced algorithmic analysis</strong> to uncover the structural and financial signals conventional research overlooks.</p>
+          <p>Our work spans listed corporates, critical ecosystems, and cross-border capital flows—exposing the forces that quietly shape valuations, risks, and strategic outcomes. We don’t merely interpret data; we <strong>engineer intelligence frameworks</strong> that equip investors, boards, and policymakers to act with clarity, precision, and foresight.</p>
+        </div>
+
+        <p class="cta-row">
+          <a href="/snqr-ai" class="btn-primary">Request a Quant Scan</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- How We Do It -->
+    <section id="how-we-do" class="about-section anchor-offset" data-aos="fade-up"data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <h2 class="section-title">How We Do It</h2>
+          <span class="decorative-line" aria-hidden="true"></span>
+        </header>
+
+        <div class="section-copy">
+          <p>We begin with <strong>Saptanga</strong>, which views a sovereign as a living organism of interdependent limbs, and with the quiet resonance of the <strong>Nupura</strong>, whose subtle signals can transform economies. In that spirit, we treat markets, corporates, and states as <strong>dynamic, evolving systems</strong>, not static datasets.</p>
+          <p>We fuse political economy with rigorous quantitative science to map how <strong>hidden risks, policy vectors, strategic alliances, and algorithmic patterns</strong> converge to shape outcomes. This is how we uncover not only where markets stand today, but <strong>how they are predisposed to move</strong>—so our clients can navigate complexity with conviction.</p>
+        </div>
+
+        <p class="cta-row">
+          <a href="/snqr-ai" class="btn-primary">Explore SNQR Lab</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Values & Commitments (reworked) -->
+    <section id="values" class="about-section anchor-offset" data-aos="fade-up" data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <h2 class="section-title">Our Values & Commitments</h2>
+          <span class="decorative-line" aria-hidden="true"></span>
+        </header>
+
+        <div class="values-grid" role="list">
+          <!-- Card 1 -->
+          <article class="value-card" role="listitem" tabindex="0">
+            <h3 class="value-title">Integrity before outcome</h3>
+            <p class="value-text">We ground our intelligence in verifiable data and first principles—not narratives, fashions, or convenience. Analytical fidelity is non-negotiable.</p>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="value-card" role="listitem" tabindex="0">
+            <h3 class="value-title">Depth over noise</h3>
+            <p class="value-text">We prioritise structural drivers over transient chatter. Our mandate is to surface the quiet variables that truly move systems.</p>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="value-card" role="listitem" tabindex="0">
+            <h3 class="value-title">Long-horizon stewardship</h3>
+            <p class="value-text">We think in cycles, decades, and geopolitical arcs. Our models and counsel are designed to outlast quarters and withstand regimes.</p>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="value-card" role="listitem" tabindex="0">
+            <h3 class="value-title">Systemic accountability</h3>
+            <p class="value-text">Our insights inform decisions that touch capital, communities, and sovereign trajectories. Responsibility and prudence anchor every deliverable.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leadership (yours kept, cleaned) -->
+    <section id="leadership" class="about-section anchor-offset" data-aos="fade-up" data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <h2 class="section-title">Leadership</h2>
+          <span class="decorative-line" aria-hidden="true"></span>
+          <p class="section-subtle">A triad steering SNQR’s sovereign-grade intelligence agenda.</p>
+        </header>
+
+        <div class="leaders-grid">
+          <!-- Leader 1 -->
+          <article class="leader-card glass">
+            <a href="https://www.linkedin.com/in/sasidharmadala/" target="_blank" rel="noopener" class="leader-img-link" aria-label="LinkedIn profile — Madala Sasidhar">
+              <img src="/templet/pics/sasidhar_madala.jpg" alt="Madala Sasidhar" class="leader-img">
+            </a>
+            <h3 class="leader-name">Madala Sasidhar</h3>
+            <p class="leader-role">Founder &amp; CEO</p>
+            <p class="leader-note">Vision architect &amp; Quantitative Research Analyst &amp; Economist </p>
+          </article>
+
+          <!-- Leader 2 -->
+          <article class="leader-card glass">
+            <a href="#" class="leader-img-link" aria-label="LinkedIn profile — Vaibhav Shrivastav">
+              <img src="/templet/pics/Vaibhav.jpg" alt="Vaibhav Shrivastav" class="leader-img">
+            </a>
+            <h3 class="leader-name">Vaibhav Shrivastav</h3>
+            <p class="leader-role"> Founder &amp; Head of R&D</p>
+            <p class="leader-note">Data-driven insights &amp; Publication lead</p>
+          </article>
+
+          <!-- Leader 3 -->
+          <article class="leader-card glass">
+            <a href="#" class="leader-img-link" aria-label="LinkedIn profile — Sanjeev Bihani">
+              <img src="/templet/pics/pic1.jpg" alt="Sanjeev Bihani" class="leader-img">
+            </a>
+            <h3 class="leader-name">Sanjeev Bihani</h3>
+            <p class="leader-role">Founder &amp; Head of Investment</p>
+            <p class="leader-note">Market analyst &amp; Investment Adviser</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Founder’s Note -->
+    <section id="founders-note" class="about-section anchor-offset" data-aos="fade-up" data-aos-delay="100">
+      <div class="about-container">
+        <header class="section-header">
+          <h2 class="section-title">Founder’s Note</h2>
+          <span class="decorative-line" aria-hidden="true"></span>
+        </header>
+        <blockquote class="founder-quote">
+          <p>At SNQR, we think like sovereign architects and operate with the precision of quantitative engineers. Our team spans macroeconomics, finance, geopolitics, and advanced data science—united by a single conviction: that true strategic edge comes from decoding the deep structures shaping markets and sovereign systems.</p>
+          <p>I founded Saptanga Nupura Quant Research to build intelligence frameworks rooted in the timeless doctrine of Saptanga and tuned to capture the subtle signals—the Nupura—that quietly transform economic destinies. We do not chase noise. <strong>We engineer clarity</strong>, so our clients can navigate complexity with conviction.</p>
+          <cite>— Madala Sasidhar</cite>
+        </blockquote>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer anchor for quick jump -->
+  <div id="footer"></div>
+
+  <!-- Scripts -->
+  <script src="/templet/assets/js/header.js"></script>
+  <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="/templet/assets/js/about.js"></script>
+  <footer id="snqr-footer"
+        class="relative w-full bg-gray-900 text-gray-200 select-none border-t border-white/10"
+        style="font-family:'Times New Roman', Times, serif;">
+
+  <!-- === PRIMARY 4-COLUMN GRID --------------------------------------------- -->
+  <section class="max-w-7xl mx-auto px-6 md:px-12 py-14 grid grid-cols-1 md:grid-cols-4 gap-12">
+
+    <!-- A ▸ Corporate Identity -->
+    <div>
+      <h3 class="text-lg md:text-xl font-semibold mb-4">About SNQR</h3>
+      <ul class="space-y-2 text-sm md:text-base">
+        <li><a href="/about"       class="hover:text-purple-400">Vision & Mission</a></li>
+        <li><a href="/leadership"  class="hover:text-purple-400">Leadership</a></li>
+        <li><a href="/press"       class="hover:text-purple-400">Press Room</a></li>
+        <li><a href="/timeline"    class="hover:text-purple-400">SNQR Museum</a></li>
+      </ul>
+    </div>
+
+    <!-- B ▸ Intelligence Products -->
+    <div>
+      <h3 class="text-lg md:text-xl font-semibold mb-4">Intelligence Products</h3>
+      <ul class="space-y-2 text-sm md:text-base">
+        <li><a href="/flagship"    class="hover:text-purple-400">Flagship Publications™</a></li>
+        <li><a href="/signature"   class="hover:text-purple-400">Signature Research™</a></li>
+        <li><a href="/model-lab"   class="hover:text-purple-400">SNQR Model Lab™</a></li>
+        <li><a href="/dispatch"    class="hover:text-purple-400">Investor Dispatch™</a></li>
+        <li><a href="/terminal"    class="hover:text-purple-400">SNQR Terminal</a></li>
+      </ul>
+    </div>
+
+    <!-- C ▸ Resources & Data -->
+    <div>
+      <h3 class="text-lg md:text-xl font-semibold mb-4">Resources & Data</h3>
+      <ul class="space-y-2 text-sm md:text-base">
+        <li><a href="/dashboard"   class="hover:text-purple-400">Macro Dashboard</a></li>
+        <li><a href="/catalogue"   class="hover:text-purple-400">Data Catalogue</a></li>
+        <li><a href="/methodology" class="hover:text-purple-400">Methodology & Glossary</a></li>
+        <li><a href="/api-docs"    class="hover:text-purple-400">API Docs</a></li>
+        <li><a href="/blog"        class="hover:text-purple-400">Insights Blog</a></li>
+      </ul>
+    </div>
+
+    <!-- D ▸ Careers & Collaboration -->
+    <div>
+      <h3 class="text-lg md:text-xl font-semibold mb-4">Careers & Partners</h3>
+      <ul class="space-y-2 text-sm md:text-base">
+        <li><a href="/careers"     class="hover:text-purple-400">Open Roles</a></li>
+        <li><a href="/interns"     class="hover:text-purple-400">Internships</a></li>
+        <li><a href="/partners"    class="hover:text-purple-400">Partner With Us</a></li>
+        <!-- Primary Contact CTA -->
+        <li>
+          <a href="/contact"
+             class="inline-block px-4 py-1.5 mt-2 rounded bg-purple-600 hover:bg-purple-700 text-white text-xs md:text-sm">
+             Contact & Enquiries
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- === NEWSLETTER + UTILITIES -------------------------------------------- -->
+  <section class="border-t border-white/10 py-8">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row md:justify-between md:items-center gap-10">
+
+      <!-- Newsletter Signup -->
+      <form action="https://your-mailer-endpoint" method="POST"
+            class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+        <input id="newsletter-email" name="email" type="email" required
+               class="w-full sm:w-72 px-4 py-2 rounded bg-white/10 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 text-sm md:text-base"
+               placeholder="Join Investor Dispatch™">
+        <button type="submit"
+                class="px-5 py-2 rounded bg-purple-600 hover:bg-purple-700 text-sm md:text-base">
+                Subscribe
+        </button>
+      </form>
+
+      <!-- Utilities -->
+      <div class="flex items-center gap-6 text-xs md:text-sm">
+
+        <!-- Market Ticker (replace with live script) -->
+        <div id="market-ticker" class="whitespace-nowrap overflow-hidden hidden sm:block">
+          <span class="animate-marquee">NIFTY 50 ▲ 0.34 % | SENSEX ▲ 0.29 % | USD/INR ₹83.12 | BTC $64 230 ▼ 1.2 %</span>
+        </div>
+
+        <!-- Dark-mode Toggle (Alpine.js) -->
+        <button x-data="{d:false}" x-init="d=JSON.parse(localStorage.getItem('snqrD'))||false;
+                     $watch('d',v=>{document.documentElement.classList.toggle('dark',v);
+                     localStorage.setItem('snqrD',v)})"
+                @click="d=!d"
+                class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
+          <svg x-show="!d" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 3v2m6.364 1.636l-1.414 1.414M21 12h-2M4.636 7.05L3.222 8.464M6 12H4m2.636 4.95l-1.414 1.414M12 19v2m4.95-2.636l1.414-1.414" />
+          </svg>
+          <svg x-show="d" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M20.354 15.354A9 9 0 018.646 3.646a7 7 0 0011.708 11.708z" />
+          </svg>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- === MICRO-BAR : Logo • Quick Links • Socials -------------------------- -->
+  <section class="border-t border-white/10 py-5 px-6 md:px-12
+                  flex flex-col md:flex-row md:justify-between md:items-center text-xs md:text-sm">
+
+    <!-- Left : Logo + Quick Links -->
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+      <div class="flex items-center gap-2">
+        <img src="/templet/pics/logo.png" alt="SNQR Logo" class="h-6 w-auto">
+        <span class="font-semibold">Saptanga Nupura Quant Research</span>
+      </div>
+
+      <nav class="sm:ml-6 flex flex-wrap gap-x-3 gap-y-1 opacity-80">
+        <a href="/legal"       class="hover:text-purple-400">Legal</a><span>|</span>
+        <a href="/privacy"     class="hover:text-purple-400">Privacy Notice</a><span>|</span>
+        <a href="/access-info" class="hover:text-purple-400">Access to Information</a><span>|</span>
+        <a href="/jobs"        class="hover:text-purple-400">Jobs</a><span>|</span>
+        <a href="/contact"     class="hover:text-purple-400">Contact</a>
+      </nav>
+    </div>
+
+    <!-- Right : Social Icons -->
+    <div class="mt-4 md:mt-0 flex items-center gap-4 text-lg">
+      <a href=""   aria-label="Facebook"   class="hover:opacity-75">
+        <i class="fa-brands fa-facebook-f text-[#1877f2]"></i></a>
+      <a href=""aria-label="X / Twitter" class="hover:opacity-75">
+        <i class="fa-brands fa-x-twitter text-gray-200"></i></a>
+      <a href=""          aria-label="GitHub"     class="hover:opacity-75">
+        <i class="fa-brands fa-github"></i></a>
+      <a href="https://www.linkedin.com/company/snquantresearch"
+                                               aria-label="LinkedIn"   class="hover:opacity-75">
+        <i class="fa-brands fa-linkedin-in text-[#0a66c2]"></i></a>
+      <a href="https://wa.me/916304474862"       aria-label="WhatsApp"   class="hover:opacity-75">
+        <i class="fa-brands fa-whatsapp text-[#25D366]"></i></a>
+      <a href=""   aria-label="Instagram"  class="hover:opacity-75">
+        <i class="fa-brands fa-instagram"></i></a>
+      <a href=""    aria-label="YouTube"    class="hover:opacity-75">
+        <i class="fa-brands fa-youtube text-[#ff0000]"></i></a>
+    </div>
+  </section>
+
+  <!-- === SEBI DISCLOSURE & COPYRIGHT --------------------------------------- -->
+  <section class="border-t border-white/10 py-6 px-6 md:px-12 text-xs md:text-sm leading-relaxed">
+
+    <p class="mb-2">
+      <strong>Data Sources:</strong> Select market, corporate-action, and order-book data are sourced
+      from dissemination platforms authorised by SEBI. SNQR complies with all SEBI circulars on data redistribution.
+    </p>
+
+    <p class="mb-4">
+      <strong>Legal Notice:</strong> Information provided herein is for educational and research
+      purposes only and does not constitute investment advice, an offer, or solicitation to buy or sell any security.
+      Past performance is not indicative of future results. Users should consult their financial advisor before acting
+      on any information. SNQR, its affiliates, and employees accept no liability for loss arising from use of this site.
+    </p>
+
+    <div class="text-center opacity-70">
+      © 2025 Saptanga Nupura Quant Research. All Rights Reserved.
+    </div>
+  </section>
+</footer>
+
+<!-- Symbol Search Logic -->
+<!-- SheetJS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</body>
+</html>
