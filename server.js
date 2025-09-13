@@ -6,8 +6,9 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = 3000;
 
-const JWT_SECRET = 'your_jwt_secret'; // Replace with a real secret in a real app
-const ADMIN_PASSWORD = 'admin'; // Hardcoded password
+const config = require('./config.json');
+const JWT_SECRET = config.jwt_secret;
+const ADMIN_PASSWORD = config.admin_password;
 
 app.use(cors());
 app.use(express.json());
